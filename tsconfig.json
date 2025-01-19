@@ -1,0 +1,21 @@
+{
+  "include": ["src/**/*.ts",
+	"test/**/*.ts"
+  ],
+  "compilerOptions": {
+	"baseUrl": ".",
+	"declaration": false,
+	"esModuleInterop": true,
+	"experimentalDecorators": true,
+	"preserveConstEnums": true,
+	"module": "ESNext",
+	"moduleResolution": "bundler",
+	"outDir": "./dist/lib",
+	"sourceMap": true,
+	"strict": true,
+	"target": "ESNext",
+	"lib": ["ESNext","DOM"],
+	"allowJs": true,
+	"removeComments": false,
+  }
+}
