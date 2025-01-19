@@ -8,4 +8,4 @@ const trigger = (type: EventType, props?: IEventProps): void => triggerBy(docume
 const on = (event: EventTypeOrArray, listener: Listener, options?: boolean | AddEventListenerOptions): void => onBy(document, event, listener, options);
 const un = (event: EventTypeOrArray, listener: Listener): void => unBy(document, event, listener);
 
-export {EventType, EventTypeOrArray, Listener, trigger, on, un}
+export {EventType, EventTypeOrArray, Listener, trigger, on, un, IEventProps}

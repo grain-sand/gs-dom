@@ -1,4 +1,4 @@
-import {IEventProps} from "../event/EventTypes";
+import {IEventProps} from "../event";
 
 let defaultEventProps: any;
 
