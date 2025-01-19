@@ -3,6 +3,7 @@ import {getDefaultEventProps} from "../../gdom/DefaultEventProps";
 import {WinAndDomOrArr} from "../../com/BrowserTypes";
 
 export function triggerBy(by: WinAndDomOrArr, type: EventType, props?: IEventProps) {
+	const arg= {...getDefaultEventProps(), ...props} as  Required<IEventProps>;
 	let event: any;
 	if (typeof Event === 'function') {
 		let constructor: any;
@@ -11,9 +12,9 @@ export function triggerBy(by: WinAndDomOrArr, type: EventType, props?: IEventPro
 		} else if (type.startsWith('key')) constructor = KeyboardEvent;
 		else if (type.startsWith('touch')) constructor = TouchEvent;
 		else constructor = CustomEvent;
-		event = new constructor(type, {...getDefaultEventProps(), ...props})
+		event = new constructor(type, arg)
 	} else {
-		const {bubbles, cancelable, view, detail}: any = {...getDefaultEventProps(), ...props};
+		const {bubbles, cancelable, view, detail} = arg;
 		let name: string;
 		if (type.startsWith('mouse') || type.startsWith('click') || type.startsWith('mousedown') || type.startsWith('mouseup') || type.startsWith('mousemove')) {
 			name = 'MouseEvent';
