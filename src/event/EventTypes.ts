@@ -1,14 +1,21 @@
+import {WinOrDomOrArr} from "../com/BrowserTypes";
+
 export type HtmlEventType = keyof HTMLElementEventMap | string;
 
 export type EventType = keyof DocumentEventMap | keyof WindowEventMap | HtmlEventType | string
 
 export type EventTypeOrArray = EventType | EventType[]
 
-export type Listener = (event: Event) => void
+export type Listener<E extends Event = Event> = (event: E) => void
 
-export interface IEventProps {
+export type EventInit<T = any> = CustomEventInit<T> & MouseEventInit & KeyboardEventInit
+
+export interface IEventProps<T = any> extends EventInit<T> {
 	bubbles?: boolean,
 	cancelable?: boolean,
-	detail?: any
 	view?: Window | any,
+}
+
+export interface IAddEventOption extends AddEventListenerOptions {
+	by?: WinOrDomOrArr
 }

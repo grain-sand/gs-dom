@@ -7,7 +7,10 @@ import {logJson} from "gs-base";
 const console = (top as any).console;
 
 describe('gdom', () => {
+	document.body.innerHTML = `
+		<button>test</button>
+	`
 	it('proxy', async (): Promise<void> => {
-		console.log('test-gdom', 'proxy')
+		console.log('test-gdom', document.body)
 	})
 })

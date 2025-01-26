@@ -16,7 +16,8 @@ const tsConfig = {
 
 const output = (suffix) => ({
 	file: `dist/lib/index.${suffix}`,
-	format: 'esm'
+	format: 'esm',
+	inlineDynamicImports: true
 });
 
 const jsConfig = (suffix, external,plugins=[]) => ({

@@ -1,9 +1,11 @@
-export type ElOrArr = HTMLElement | HTMLElement[];
+export type DomEl = HTMLElement | HTMLInputElement;
 
-export type DomAndEl = HTMLElement | Document;
+export type ElOrArr = DomEl | DomEl[];
 
-export type DomAndElOrArr = DomAndEl | DomAndEl[];
+export type DomOrEl = DomEl | Document;
 
-export type WinAndDom = DomAndEl | Window;
+export type DomElOrArr = DomOrEl | DomOrEl[];
 
-export type WinAndDomOrArr = WinAndDom | WinAndDom[];
+export type WinOrDom = DomOrEl | Window;
+
+export type WinOrDomOrArr = WinOrDom | WinOrDom[];

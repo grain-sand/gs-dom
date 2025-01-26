@@ -1,9 +1,10 @@
 import {EventType, EventTypeOrArray, Listener} from "../event";
-import {WinAndDom} from "../com/BrowserTypes";
+import {WinOrDom} from "../com/BrowserTypes";
 import {IWaitFindArg, ObserverArg} from "../observer";
-import {IEventProps} from "../event/EventTypes";
+import {IEventProps} from "../event";
 
-export interface IGDom<T extends WinAndDom = any> {
+
+export interface IGDom<T extends WinOrDom = WinOrDom> {
 
 	text(): string
 
@@ -12,6 +13,10 @@ export interface IGDom<T extends WinAndDom = any> {
 	html(): string
 
 	html(text: string): GDom<T>
+
+	attr(name: string): string
+
+	attr(name: string, value: string): GDom<T>
 
 	trigger(type: EventType, props?: IEventProps): GDom<T>
 
@@ -25,4 +30,6 @@ export interface IGDom<T extends WinAndDom = any> {
 
 }
 
-export type GDom<T extends WinAndDom = any> = IGDom<T> & T[] & T
+export type GDom<T extends WinOrDom = WinOrDom> = IGDom<T> & T[] & T
+
+export type GDomFn<T extends WinOrDom = WinOrDom, R = any> = (els: WinOrDom[], proxy: IGDom<T>) => GDom<T> | R | undefined | Promise<GDom<T> | R | undefined>;

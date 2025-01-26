@@ -1,7 +1,9 @@
+import {DomElOrArr} from "../com/BrowserTypes";
+
 export interface IWaitFindArg {
 
 	/**
-	 * 是否遍历子节点
+	 * 是否遍历孙节点
 	 */
 	subtree?: boolean
 
@@ -21,5 +23,19 @@ export interface IWaitFindArg {
 	 * 最小查找个数
 	 * 默认为1
 	 */
-	minFindCount?:number
+	minFindCount?: number
+
+	gdom?: boolean
+
+}
+
+export interface IByWaitFindArg extends IWaitFindArg {
+
+	by?: DomElOrArr
+}
+
+export interface IGdomByWaitFindArg extends IByWaitFindArg {
+
+	gdom: true
+
 }

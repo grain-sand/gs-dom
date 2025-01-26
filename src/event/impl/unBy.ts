@@ -1,7 +1,7 @@
 import {EventTypeOrArray, Listener} from "../EventTypes";
-import {WinAndDomOrArr} from "../../com/BrowserTypes";
+import {WinOrDomOrArr} from "../../com/BrowserTypes";
 
-export function unBy(by: WinAndDomOrArr, event: EventTypeOrArray, listener: Listener) {
+export function unBy(by: WinOrDomOrArr, event: EventTypeOrArray, listener: Listener) {
 	if (Array.isArray(event)) {
 		for (const e of event) {
 			unBy(by, e, listener);

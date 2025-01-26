@@ -1,5 +1,6 @@
 import {AtLeastOne} from "gs-base";
 import {GDom} from "../gdom";
+import {DomElOrArr} from "../com/BrowserTypes";
 
 export type ElementUpdateFn = (elements: HTMLElement[], mutation?: MutationRecord) => void | Promise<void>;
 export type GDomUpdateFn = (gdom: GDom<HTMLElement>, mutation?: MutationRecord) => void | Promise<void>;
@@ -41,7 +42,7 @@ export type SelectorElementUpdate = AtLeastOne<ISelectorElementUpdate, 'addedEle
 
 type PartialIElementUpdate = Partial<IElementUpdate>;
 
-interface IObserverArg extends PartialIElementUpdate {
+interface IObserveArg extends PartialIElementUpdate {
 
 	/**
 	 * 是否监听子节点
@@ -120,5 +121,14 @@ interface IObserverArg extends PartialIElementUpdate {
 
 }
 
-export type ObserverArg = AtLeastOne<IObserverArg,
+interface IByObserveArg extends IObserveArg{
+
+	by?: DomElOrArr
+
+}
+
+export type ObserverArg = AtLeastOne<IObserveArg,
+	'changedAttributes' | 'addedNodes' | 'addedElements' | 'addedTexts' | 'removedNodes' | 'removedElements' | 'removedTexts' | 'selectors'>;
+
+export type ByObserverArg = AtLeastOne<IByObserveArg,
 	'changedAttributes' | 'addedNodes' | 'addedElements' | 'addedTexts' | 'removedNodes' | 'removedElements' | 'removedTexts' | 'selectors'>;

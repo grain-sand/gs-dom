@@ -1,89 +1,42 @@
-import {ElementUpdateFn, GDomUpdateFn, ObserverArg, TextNodeUpdateFn} from "../IObserverArg";
+import {ElementUpdateFn, GDomUpdateFn, TextNodeUpdateFn} from "../IObserveArg";
 import {groupNodes} from "../../helper";
-import {IPreParsingSelectorResult, preParsingSelector} from "./preParsingSelector";
-import {proxyGDom} from "../../gdom/proxyGDom";
 
-export function observerBy(by: HTMLElement | Document | HTMLElement[], arg: ObserverArg): MutationObserver {
-	const config: MutationObserverInit = {
-		subtree: arg.subtree as any,
-		attributeOldValue: arg.attributeOldValue as any,
-		attributeFilter: arg.attributeFilter as any,
-		characterDataOldValue: arg.textOldValue as any,
-	};
+let proxyGDom: Function;
 
-	arg.changedAttributes && (config.attributes = true);
-	arg.changedText && (config.characterData = true);
-
-	const {
-		addedNodes,
-		removedNodes,
-		addedTexts,
-		removedTexts,
-		addedElements,
-		removedElements,
-		addedGDom,
-		removedGDom,
-		changedAttributes,
-		changedText,
-		selectors,
-		deepMatch
-	}: ObserverArg = arg;
-
-	const {
-		addedSelectors,
-		removedSelectors,
-		addedRecord,
-		removedRecord,
-		addedGRecord,
-		removedGRecord
-	}: IPreParsingSelectorResult = preParsingSelector(selectors);
-
-	const addedGrouped = !!(addedElements || addedGDom || addedTexts || addedSelectors.length);
-	const removedGrouped = !!(removedElements || removedGDom || removedTexts || removedSelectors.length);
-	(addedNodes || removedNodes || addedGrouped || removedGrouped) && (config.childList = true);
-
-	const observer = new MutationObserver(mutations => {
-		for (const mutation of mutations) {
-			if (mutation.type === 'attributes') {
-				changedAttributes?.(mutation);
-			} else if (mutation.type === 'characterData') {
-				changedText?.(mutation)
-			} else if (mutation.addedNodes.length) {
-				mutation.addedNodes.length && addedNodes?.(mutation.addedNodes, mutation)
-				addedGrouped && callGrouped(mutation, mutation.addedNodes, addedSelectors, addedRecord, addedGRecord, addedTexts, addedElements, addedGDom, deepMatch)
-			} else if (mutation.removedNodes.length) {
-				mutation.removedNodes.length && removedNodes?.(mutation.removedNodes, mutation)
-				removedGrouped && callGrouped(mutation, mutation.removedNodes, removedSelectors, removedRecord, removedGRecord, removedTexts, removedElements, removedGDom, deepMatch)
-			}
-		}
-	});
-	if (Array.isArray(by)) {
-		for (const el of by as HTMLElement[]) observer.observe(el, config)
-		if (arg.immediate && addedGrouped) callSelector(addedSelectors, by, addedRecord, addedGRecord, true);
-	} else {
-		observer.observe(by, config)
-		if (arg.immediate && addedGrouped) callSelector(addedSelectors, [by as HTMLElement], addedRecord, addedGRecord, true);
-	}
-	return observer;
+export function callGrouped(mutation: MutationRecord, nodes: NodeList, selectors: string[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, textsUpdated?: TextNodeUpdateFn, elementsUpdated?: ElementUpdateFn, gdomUpdated?: GDomUpdateFn, deepMatch?: boolean) {
+	if (proxyGDom) {
+		realCallGrouped(mutation, nodes, selectors, selectorRecord, selectorGRecord, textsUpdated, elementsUpdated, gdomUpdated, deepMatch, proxyGDom);
+	} else import('../../gdom/proxyGDom').then(exp => {
+		proxyGDom = exp.proxyGDom;
+		realCallGrouped(mutation, nodes, selectors, selectorRecord, selectorGRecord, textsUpdated, elementsUpdated, gdomUpdated, deepMatch, proxyGDom);
+	})
 }
 
+export function callSelector(selectors: string[], elementNodes: HTMLElement[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, deepMatch?: boolean, mutation?: MutationRecord, proxyGDom?: Function) {
+	if (proxyGDom) {
+		realCallSelector(selectors, elementNodes, selectorRecord, selectorGRecord, deepMatch, mutation, proxyGDom);
+	} else import('../../gdom/proxyGDom').then(exp => {
+		proxyGDom = exp.proxyGDom;
+		realCallSelector(selectors, elementNodes, selectorRecord, selectorGRecord, deepMatch, mutation, proxyGDom);
+	});
+}
 
-function callGrouped(mutation: MutationRecord, nodes: NodeList, selectors: string[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, textsUpdated?: TextNodeUpdateFn, elementsUpdated?: ElementUpdateFn, gdomUpdated?: GDomUpdateFn, deepMatch?: boolean) {
+function realCallGrouped(mutation: MutationRecord, nodes: NodeList, selectors: string[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, textsUpdated?: TextNodeUpdateFn, elementsUpdated?: ElementUpdateFn, gdomUpdated?: GDomUpdateFn, deepMatch?: boolean, proxyGDom?: Function) {
 	const {textNodes, elementNodes} = groupNodes(mutation.addedNodes)
 	textNodes.length && textsUpdated?.(textNodes, mutation);
 	if (elementNodes.length) {
 		elementsUpdated?.(elementNodes, mutation);
-		gdomUpdated?.(proxyGDom(elementNodes), mutation);
+		gdomUpdated?.(proxyGDom!(elementNodes), mutation);
 	}
-	selectors.length && callSelector(selectors, elementNodes, selectorRecord, selectorGRecord, deepMatch, mutation);
+	selectors.length && callSelector(selectors, elementNodes, selectorRecord, selectorGRecord, deepMatch, mutation, proxyGDom);
 }
 
-function callSelector(selectors: string[], elementNodes: HTMLElement[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, deepMatch?: boolean, mutation?: MutationRecord) {
+function realCallSelector(selectors: string[], elementNodes: HTMLElement[], selectorRecord: Record<string, ElementUpdateFn>, selectorGRecord: Record<string, GDomUpdateFn>, deepMatch?: boolean, mutation?: MutationRecord, proxyGDom?: Function) {
 	for (const selector of selectors) {
 		const selectedEls = deepMatches(elementNodes, selector, deepMatch);
 		if (selectedEls.length) {
 			selectorRecord[selector]?.(selectedEls, mutation);
-			selectorGRecord[selector]?.(proxyGDom(selectedEls), mutation);
+			selectorGRecord[selector]?.(proxyGDom!(selectedEls), mutation);
 		}
 	}
 }

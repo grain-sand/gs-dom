@@ -1,4 +1,4 @@
-import {ElementUpdateFn, GDomUpdateFn, SelectorElementUpdate} from "../IObserverArg";
+import {ElementUpdateFn, GDomUpdateFn, SelectorElementUpdate} from "../IObserveArg";
 
 export interface IPreParsingSelectorResult {
 	addedSelectors: string[]

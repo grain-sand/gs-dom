@@ -1,8 +1,8 @@
 import {EventType, IEventProps} from "../EventTypes";
 import {getDefaultEventProps} from "../../gdom/DefaultEventProps";
-import {WinAndDomOrArr} from "../../com/BrowserTypes";
+import {WinOrDomOrArr} from "../../com/BrowserTypes";
 
-export function triggerBy(by: WinAndDomOrArr, type: EventType, props?: IEventProps) {
+export function triggerBy(by: WinOrDomOrArr, type: EventType, props?: IEventProps) {
 	const arg= {...getDefaultEventProps(), ...props} as  Required<IEventProps>;
 	let event: any;
 	if (typeof Event === 'function') {

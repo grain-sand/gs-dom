@@ -1,7 +1,7 @@
 import {EventTypeOrArray, Listener} from "../EventTypes";
-import {WinAndDomOrArr} from "../../com/BrowserTypes";
+import {WinOrDomOrArr} from "../../com/BrowserTypes";
 
-export function onBy(by: WinAndDomOrArr, event: EventTypeOrArray, listener: Listener, options?: boolean | AddEventListenerOptions) {
+export function onBy(by: WinOrDomOrArr, event: EventTypeOrArray, listener: Listener, options?: boolean | AddEventListenerOptions) {
 	if (Array.isArray(event)) {
 		for (const e of event) {
 			onBy(by, e, listener, options);
