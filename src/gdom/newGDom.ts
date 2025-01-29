@@ -1,14 +1,14 @@
 import {isFunction} from "gs-base";
 import {GDom} from "./IGDom";
 import {WinOrDom} from "../com/BrowserTypes";
-import {proxyFns} from "./proxyFns";
+import {gdomFns} from "./gdomFns";
 
 
-export function proxyGDom<By extends WinOrDom = any>(by: By | By[]): GDom<By> {
+export function newGDom<By extends WinOrDom = WinOrDom>(by: By | By[]): GDom<By> {
 	return new Proxy(Array.isArray(by) ? by : [by], {
 		get(target, property, receiver) {
-			if (property in proxyFns) {
-				return (proxyFns[property as keyof typeof proxyFns] as Function)(target, receiver);
+			if (property in gdomFns) {
+				return (gdomFns[property as keyof typeof gdomFns] as Function)(target, receiver);
 			}
 			if (property in target) {
 				return Reflect.get(target, property, receiver);

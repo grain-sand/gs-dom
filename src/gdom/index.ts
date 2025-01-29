@@ -1,2 +1,3 @@
 export * from './IGDom'
-export {addProxyFn, addProxyFns} from './proxyFns'
+export * from './newGDom'
+export {addProxyFn, addProxyFns} from './gdomFns'

@@ -7,7 +7,7 @@ import terser from '@rollup/plugin-terser';
 
 const input = 'src/index.ts'
 
-const external = ['grain-sand-base']
+const external = ['gs-base']
 
 const tsConfig = {
 	respectExternal: false,

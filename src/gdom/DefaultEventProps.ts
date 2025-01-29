@@ -1,8 +1,8 @@
-import {IEventProps} from "../event";
+import {IByEventProps} from "../event";
 
 let defaultEventProps: any;
 
-export function getDefaultEventProps(): IEventProps {
+export function getDefaultEventProps(): IByEventProps {
 	return defaultEventProps || (defaultEventProps = {
 		bubbles: true,
 		cancelable: true,
@@ -10,6 +10,6 @@ export function getDefaultEventProps(): IEventProps {
 	});
 }
 
-export function setDefaultEventProps(props: IEventProps): IEventProps {
+export function setDefaultEventProps(props: IByEventProps): IByEventProps {
 	return defaultEventProps = Object.assign(getDefaultEventProps(), props);
 }

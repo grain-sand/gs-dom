@@ -1,5 +1,5 @@
 export * from './com/BrowserTypes'
 export * from './event'
 export * from './gdom'
-export * from './helper'
 export * from './observer'
+export * from './dom'

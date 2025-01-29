@@ -10,9 +10,9 @@ const console = (top as any).console;
 describe('wait', () => {
 	it('wait', async (): Promise<void> => {
 		setTimeout(() => {
-			document.body.innerHTML = '<button>有按钮</button><div>abc</div><button class="abc">有按钮</button>'
+			document.body.innerHTML = '<button>有按钮1</button><div>abc</div><button class="abc">有按钮2</button>'
 		}, 100)
-		const btn = await waitFind('button.abc')
+		const btn = await waitFind({selector:'button',content:'1'})
 		console.log(btn)
 	})
 	it('wait-gdom', async (): Promise<void> => {
@@ -39,7 +39,7 @@ describe('wait', () => {
 			}
 		})
 		setTimeout(() => {
-			document.body.innerHTML = '<button>有按钮</button><div>abc</div>'
+			document.body.innerHTML = '<button>有按钮好多</button><div>abc</div>'
 		}, 100)
 	})
 })

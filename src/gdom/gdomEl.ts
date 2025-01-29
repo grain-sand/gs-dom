@@ -1,14 +1,14 @@
 import {WinOrDom} from "../com/BrowserTypes";
-import {proxyGDom} from "./proxyGDom";
+import {newGDom} from "./newGDom";
 import {GDom} from "./index";
 
-export function gdomEl<T extends WinOrDom>(el: T|T[], gdom: true): GDom<T>;
+export function gdomEl<T extends WinOrDom>(el: T | T[], gdom: true): GDom<T>;
 
-export function gdomEl<T extends WinOrDom>(el: T|T[], gdom?: false): T[];
+export function gdomEl<T extends WinOrDom>(el: T | T[], gdom?: false | undefined): T[];
 
-export function gdomEl<T extends WinOrDom>(el: T|T[], gdom?: boolean): T[] | GDom<T> {
+export function gdomEl<T extends WinOrDom>(el: T | T[], gdom?: boolean | undefined): T[] | GDom<T> {
 	if (gdom) {
-		return proxyGDom(el);
+		return newGDom(el);
 	}
 	return Array.isArray(el) ? el : [el];
 }

@@ -16,6 +16,10 @@ export interface IEventProps<T = any> extends EventInit<T> {
 	view?: Window | any,
 }
 
+export interface IByEventProps<T = any> extends IEventProps<T>{
+	by?: WinOrDomOrArr
+}
+
 export interface IAddEventOption extends AddEventListenerOptions {
 	by?: WinOrDomOrArr
 }

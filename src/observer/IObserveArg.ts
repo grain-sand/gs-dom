@@ -1,6 +1,7 @@
 import {AtLeastOne} from "gs-base";
 import {GDom} from "../gdom";
 import {DomElOrArr} from "../com/BrowserTypes";
+import {QuerySelector} from "../dom";
 
 export type ElementUpdateFn = (elements: HTMLElement[], mutation?: MutationRecord) => void | Promise<void>;
 export type GDomUpdateFn = (gdom: GDom<HTMLElement>, mutation?: MutationRecord) => void | Promise<void>;
@@ -35,7 +36,7 @@ interface ISelectorElementUpdate extends IElementUpdate {
 	/**
 	 * 当监听元素节点添加与删除时,需要匹配的选择器
 	 */
-	selector: string
+	selector: QuerySelector
 }
 
 export type SelectorElementUpdate = AtLeastOne<ISelectorElementUpdate, 'addedElements' | 'removedElements' | 'addedGDom' | 'removedGDom'>;

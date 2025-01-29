@@ -1,15 +1,14 @@
-import {IByWaitFindArg, IGdomByWaitFindArg, IWaitFindArg} from "./IWaitFindArg";
+import {IByWaitFindArg, IGdomByWaitFindArg} from "./IWaitFindArg";
 import {observe} from "./observe";
-import {manyQuerySelectorAll} from "../helper";
-import {GDom} from "../gdom";
+import {addProxyFn, GDom} from "../gdom";
+import {gdomEl} from "../gdom/gdomEl";
+import {find, QuerySelector} from "../dom";
 
-let gdomEl: Function;
+export function waitFind<T extends HTMLElement>(selector: QuerySelector, arg: IGdomByWaitFindArg): Promise<GDom<T>[] | undefined>;
 
-export function waitFind<T extends HTMLElement>(selector: string, arg: IGdomByWaitFindArg): Promise<GDom<T>[] | undefined>;
+export function waitFind<T extends HTMLElement>(selector: QuerySelector, arg?: IByWaitFindArg): Promise<T[] | undefined>;
 
-export function waitFind<T extends HTMLElement>(selector: string, arg?: IByWaitFindArg): Promise<T[] | undefined>;
-
-export async function waitFind<T extends HTMLElement>(selector: string, arg?: IByWaitFindArg): Promise<GDom<T>[] | T[]> {
+export async function waitFind<T extends HTMLElement>(selector: QuerySelector, arg?: IByWaitFindArg): Promise<GDom<T>[] | T[]> {
 	const {
 		gdom = false,
 		throwError = false,
@@ -17,8 +16,8 @@ export async function waitFind<T extends HTMLElement>(selector: string, arg?: IB
 		timeout = 300,
 		minFindCount = 1,
 		by = document
-	} = (arg || (arg = {})) as Required<IByWaitFindArg>;
-	let els: any[] = manyQuerySelectorAll(by, selector);
+	} = (arg || {}) as Required<IByWaitFindArg>;
+	let els: any[] = find(selector, by);
 	// (globalThis as any).top.console.log(els)
 	els.length || (els = await new Promise((resolve, reject) => {
 		const arr: any[] = [];
@@ -44,6 +43,14 @@ export async function waitFind<T extends HTMLElement>(selector: string, arg?: IB
 			return arr;
 		}, timeout * 1000);
 	}))
-	gdomEl || (gdomEl = ((await import('../gdom/gdomEl')).gdomEl));
 	return gdomEl(els, gdom as any);
 }
+
+addProxyFn('waitFind', (els) => {
+	return (selector: string, arg: IByWaitFindArg) => {
+		arg || (arg = {});
+		arg.by = els as any;
+		arg.gdom = true;
+		return waitFind(selector, arg)
+	};
+})

@@ -1,10 +1,12 @@
-import {EventType, EventTypeOrArray, Listener} from "../event";
-import {WinOrDom} from "../com/BrowserTypes";
+import {EventType, EventTypeOrArray, IEventProps, Listener} from "../event";
+import {DomEl, WinOrDom} from "../com/BrowserTypes";
 import {IWaitFindArg, ObserverArg} from "../observer";
-import {IEventProps} from "../event";
+import {IndexedQuerySelector, IndexedQuerySelectorOrArr} from "../dom";
 
 
 export interface IGDom<T extends WinOrDom = WinOrDom> {
+
+	readonly raw: T[]
 
 	text(): string
 
@@ -18,18 +20,30 @@ export interface IGDom<T extends WinOrDom = WinOrDom> {
 
 	attr(name: string, value: string): GDom<T>
 
+	attr(name: Object): string
+
 	trigger(type: EventType, props?: IEventProps): GDom<T>
 
-	on(event: EventTypeOrArray, listener: Listener, options?: boolean | AddEventListenerOptions): GDom<T>
+	on(event: EventTypeOrArray, listener: Listener, options?: boolean | AddEventListenerOptions): GDom<T>;
 
-	un(event: EventTypeOrArray, listener: Listener): GDom<T>
+	on(event: Record<EventType, Listener> | Object, options?: boolean | AddEventListenerOptions): GDom<T>;
 
-	observer(arg: ObserverArg): Promise<MutationObserver>
+	un(event: Record<EventType, Listener> | Object): void;
 
-	waitFind(selector: string, arg?: IWaitFindArg): Promise<GDom<HTMLElement> | undefined>
+	un(event: EventTypeOrArray, listener: Listener): void;
+
+	observe(arg: ObserverArg): Promise<MutationObserver>
+
+	waitFind<El extends DomEl = DomEl>(selector: string, arg?: IWaitFindArg): Promise<GDom<El> | undefined>
+
+	query<El extends DomEl = DomEl>(selector: IndexedQuerySelectorOrArr): GDom<El>
+
+	filter<El extends DomEl = DomEl>(selector: IndexedQuerySelector): GDom<El>
 
 }
 
 export type GDom<T extends WinOrDom = WinOrDom> = IGDom<T> & T[] & T
 
-export type GDomFn<T extends WinOrDom = WinOrDom, R = any> = (els: WinOrDom[], proxy: IGDom<T>) => GDom<T> | R | undefined | Promise<GDom<T> | R | undefined>;
+export type GDomResultFn<T extends WinOrDom = WinOrDom, R = any> = (...args: any[]) => GDom
+
+export type GDomFn<T extends WinOrDom = WinOrDom, R = any> = (els: WinOrDom[], proxy: IGDom<T>) => R | GDomResultFn<T, R>
