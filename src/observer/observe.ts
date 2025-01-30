@@ -1,7 +1,8 @@
 import {ByObserverArg, ElementUpdateFn, GDomUpdateFn, TextNodeUpdateFn} from "./IObserveArg";
-import {addProxyFn, newGDom} from "../gdom";
 import {mapSelectorToFn, SelectorFn} from "./impl/selectorToFns";
-import {groupNodes} from "../dom";
+import {groupNodes} from "../dom/groupNodes";
+import {addProxyFn} from "../gdom/gdomFns";
+import {newGDom} from "../gdom/newGDom";
 
 export function observe(arg: ByObserverArg) {
 	const config: MutationObserverInit = {

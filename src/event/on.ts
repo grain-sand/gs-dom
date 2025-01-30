@@ -1,7 +1,8 @@
-import {EventType, EventTypeOrArray, IAddEventOption, Listener} from "./EventTypes";
+import {EventRecord, EventTypeOrArray, IAddEventOption, Listener} from "./EventTypes";
 import {isObject} from "gs-base";
+import {addProxyFn} from "../gdom/gdomFns";
 
-export function on(event: Record<EventType, Listener> | Object, options?: boolean | IAddEventOption): void;
+export function on(event: EventRecord | Object, options?: boolean | IAddEventOption): void;
 export function on(event: EventTypeOrArray, listener: Listener, options?: boolean | IAddEventOption): void;
 export function on(event: any, listener: any, options?: any) {
 	if (Array.isArray(event)) {
@@ -12,7 +13,7 @@ export function on(event: any, listener: any, options?: any) {
 	}
 	if (isObject(event)) {
 		for (const [key, value] of Object.entries(event)) {
-			if(value instanceof Function) {
+			if (value instanceof Function) {
 				on(key, value as any, listener || options);
 			}
 		}
@@ -28,3 +29,16 @@ export function on(event: any, listener: any, options?: any) {
 	options || (options = {});
 	(options.by || document).addEventListener(event, listener, options);
 }
+
+addProxyFn('on', (by: any[], proxy: any) => {
+	return (event: any, listener: any, options: any) => {
+		if (isObject(event)) {
+			listener && (listener.by = by) || (listener = {by});
+			on(event, listener);
+		} else {
+			options && (options.by = by) || (options = {by});
+			on(event, listener, options);
+		}
+		return proxy;
+	}
+})

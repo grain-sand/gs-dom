@@ -1,6 +1,6 @@
 import {WinOrDom} from "../com/BrowserTypes";
 import {newGDom} from "./newGDom";
-import {GDom} from "./index";
+import {GDom} from "./IGDom";
 
 export function gdomEl<T extends WinOrDom>(el: T | T[], gdom: true): GDom<T>;
 

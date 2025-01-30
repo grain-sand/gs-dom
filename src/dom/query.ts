@@ -1,12 +1,13 @@
 import {DomEl} from "../com/BrowserTypes";
-import {addProxyFn, GDom} from "../gdom";
 import {isString} from "gs-base";
 import {gdomEl} from "../gdom/gdomEl";
-import {IByQueryArg, IGdomByQueryArg, IndexedQuerySelectorOrArr, IValidQueryArg} from "./IQueryArg";
+import {IByQueryArg, IGdomByQueryArg, IndexedSelectorOrArr, IValidQueryArg} from "./IQueryArg";
 import {filter} from "./filter";
 import {nextAll, parents, prevAll} from "./directionQueries";
 import {find} from "./find";
 import {children} from "./children";
+import {GDom} from "../gdom/IGDom";
+import {addProxyFn} from "../gdom/gdomFns";
 
 
 /**
@@ -26,19 +27,19 @@ import {children} from "./children";
  * - `selector` 为或 `GDom` 时
  *   - 将直接返回
  */
-export function query<EL extends DomEl = DomEl>(arg: IGdomByQueryArg<EL>): GDom<EL>;
+export function query<EL extends DomEl = DomEl>(arg: IGdomByQueryArg): GDom<EL>;
 
-export function query<EL extends DomEl = DomEl>(selector: IndexedQuerySelectorOrArr | IByQueryArg<EL>): EL[];
+export function query<EL extends DomEl = DomEl>(selector: IndexedSelectorOrArr | IByQueryArg): EL[];
 
 export function query<EL extends DomEl = DomEl>(arg: any): GDom<EL> | EL[] {
 	arg.selectors || (arg = {selectors: arg});
 	Array.isArray(arg.selectors) || (arg.selectors = [arg.selectors]);
 	arg.by && (Array.isArray(arg.by) || (arg.by = [arg.by])) || (arg = {...arg, by: [document]});
-	const {by, withBy = 'none', selectors, gdom} = arg as IValidQueryArg<EL>;
+	const {by, withBy = 'none', selectors, gdom} = arg as IValidQueryArg;
 	const result: EL[] = [];
 
 	if (withBy !== 'none') {
-		result.push(...filter(selectors[selectors.length - 1], by));
+		result.push(...filter(selectors[selectors.length - 1], by) as any);
 		if (result.length && withBy === 'return') {
 			return gdomEl(result, gdom as any);
 		}
@@ -64,7 +65,7 @@ export function query<EL extends DomEl = DomEl>(arg: any): GDom<EL> | EL[] {
 		}
 
 	}
-	result.push(...tmp);
+	result.push(...tmp as any);
 	return gdomEl(result, gdom as any);
 }
 

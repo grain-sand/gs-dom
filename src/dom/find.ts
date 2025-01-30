@@ -1,7 +1,8 @@
 import {SimpleQueryFn} from "./IQueryArg";
 import {createSimpleQuery} from "./impl/createSimpleQuery";
 import {isFunction} from "gs-base";
-import {addProxyFn, newGDom} from "../gdom";
+import {newGDom} from "../gdom/newGDom";
+import {addProxyFn} from "../gdom/gdomFns";
 
 export const find: SimpleQueryFn = createSimpleQuery((by, {selector, skipCheck, check}) => {
 	const result = Array.from(by.querySelectorAll(selector)) as HTMLElement[];

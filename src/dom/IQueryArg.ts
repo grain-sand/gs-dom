@@ -41,10 +41,10 @@ export interface IIndexedQuerySelector extends IQuerySelector {
 
 export type IndexedQuerySelector = string | IIndexedQuerySelector
 
-export type IndexedQuerySelectorOrArr = IndexedQuerySelector | IndexedQuerySelector[]
+export type IndexedSelectorOrArr = IndexedQuerySelector | IndexedQuerySelector[]
 
-export interface IQueryArg<EL extends DomEl> {
-	selectors: IndexedQuerySelectorOrArr
+export interface IQueryArg {
+	selectors: IndexedSelectorOrArr
 	/**
 	 * - 是否查找`by`
 	 *   - `return`  在`by`查找到结果后后立即返回,不再查找子孙元素,否则查找子孙元素
@@ -54,16 +54,16 @@ export interface IQueryArg<EL extends DomEl> {
 	withBy?: 'return' | 'continue' | 'none'
 }
 
-export interface IByQueryArg<EL extends DomEl> extends IQueryArg<EL> {
+export interface IByQueryArg extends IQueryArg {
 	by?: DomElOrArr
 	gdom?: boolean
 }
 
-export interface IGdomByQueryArg<EL extends DomEl> extends IByQueryArg<EL> {
+export interface IGdomByQueryArg extends IByQueryArg {
 	gdom: true
 }
 
-export interface IValidQueryArg<EL extends DomEl> extends Required<IByQueryArg<EL>> {
+export interface IValidQueryArg extends Required<IByQueryArg> {
 	selectors: IndexedQuerySelector[]
 	by: DomEl[]
 }

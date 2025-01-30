@@ -8,18 +8,20 @@ export type EventTypeOrArray = EventType | EventType[]
 
 export type Listener<E extends Event = Event> = (event: E) => void
 
-export type EventInit<T = any> = CustomEventInit<T> & MouseEventInit & KeyboardEventInit
-
-export interface IEventProps<T = any> extends EventInit<T> {
-	bubbles?: boolean,
-	cancelable?: boolean,
+export interface IEventProps {
 	view?: Window | any,
 }
 
-export interface IByEventProps<T = any> extends IEventProps<T>{
+export interface IByEventProps extends IEventProps {
 	by?: WinOrDomOrArr
 }
 
 export interface IAddEventOption extends AddEventListenerOptions {
 	by?: WinOrDomOrArr
 }
+
+export type EventRecord = Record<EventType, Listener>
+
+export type EventProp<Init extends EventInit = EventInit> = IEventProps & Init
+
+export type ByEventProps<Init extends EventInit = EventInit> = IByEventProps & Init

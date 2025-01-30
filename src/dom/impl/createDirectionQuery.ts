@@ -1,6 +1,7 @@
 import {SimpleQueryFn} from "../IQueryArg";
-import {addProxyFn, newGDom} from "../../gdom";
 import {createSimpleQuery} from "./createSimpleQuery";
+import {newGDom} from "../../gdom/newGDom";
+import {addProxyFn} from "../../gdom/gdomFns";
 
 export function createDirectionQuery(name: string, dirFn: (by: HTMLElement) => Element | null | undefined): SimpleQueryFn {
 	const fn: SimpleQueryFn = createSimpleQuery((by, {selector, skipCheck, check}) => {

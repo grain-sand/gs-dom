@@ -1,8 +1,10 @@
 import {IByWaitFindArg, IGdomByWaitFindArg} from "./IWaitFindArg";
 import {observe} from "./observe";
-import {addProxyFn, GDom} from "../gdom";
 import {gdomEl} from "../gdom/gdomEl";
-import {find, QuerySelector} from "../dom";
+import {QuerySelector} from "../dom/IQueryArg";
+import {find} from "../dom/find";
+import {addProxyFn} from "../gdom/gdomFns";
+import {GDom} from "../gdom/IGDom";
 
 export function waitFind<T extends HTMLElement>(selector: QuerySelector, arg: IGdomByWaitFindArg): Promise<GDom<T>[] | undefined>;
 

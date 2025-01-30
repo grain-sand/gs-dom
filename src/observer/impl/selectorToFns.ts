@@ -1,6 +1,6 @@
 import {SelectorElementUpdate} from "../IObserveArg";
 import {parseSelector} from "../../dom/impl/parseSelector";
-import {newGDom} from "../../gdom";
+import {newGDom} from "../../gdom/newGDom";
 
 export type SelectorFn = (els: HTMLElement[], mutation?: MutationRecord, liveDeep?: boolean) => void;
 
