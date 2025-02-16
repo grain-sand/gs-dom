@@ -6,7 +6,7 @@ import {addProxyFn} from "../gdom/gdomFns";
 
 export type InputEl = HTMLInputElement | HTMLTextAreaElement
 
-export type InputProps = IEventProps & InputEventInit & { data: string }
+export type InputProps = IEventProps & InputEventInit & { data: string, append?: false }
 export type ByInputProps = InputProps & { by: InputEl | InputEl[] }
 
 export function input(arg: Listener<InputEvent>, options?: IAddEventOption): void
@@ -19,14 +19,18 @@ export function input(arg: any, options?: any) {
 		return;
 	}
 	const init = arg as ByInputProps;
-	const {data, by} = init;
+	const {data, by, append} = init;
 	const dataTransfer = init.dataTransfer = new DataTransfer();
 	dataTransfer.setData('text', data);
 	init.inputType = 'insertFromPaste';
 	if (Array.isArray(by)) {
-		for (const el of by) el.value += data;
+		for (const el of by) {
+			if (append && el.value) el.value += data;
+			else el.value = data;
+		}
 	} else {
-		by.value += data;
+		if (append && by.value) by.value += data;
+		else by.value = data;
 	}
 	trigger('input', init);
 }

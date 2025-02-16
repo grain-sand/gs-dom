@@ -1,6 +1,6 @@
 {
   "name": "gs-dom-dev",
-  "version": "0.1.3",
+  "version": "0.2.2",
   "scripts": {
     "build": "rollup -c",
     "build-watch": "rollup -c --watch",
