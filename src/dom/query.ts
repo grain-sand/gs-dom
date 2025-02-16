@@ -46,7 +46,7 @@ export function query<EL extends DomEl = DomEl>(arg: any): GDom<EL> | EL[] {
 	}
 	let tmp = by;
 	for (const selector of selectors as any[]) {
-		switch (isString(selector) ? selector.charAt(0) : selector.selector.charAt(0)) {
+		switch (isString(selector) ? selector?.charAt(0) : selector?.selector?.charAt(0)) {
 			case '^':
 				tmp = parents(selector, tmp)
 				break;
