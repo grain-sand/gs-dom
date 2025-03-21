@@ -10,7 +10,7 @@ const console = (top as any).console;
 describe('event', () => {
 	it('on', async (): Promise<void> => {
 		const e = {
-			mouseenter: (e) => {
+			mouseenter: (e: any) => {
 				console.log(e.type)
 			}
 		}
