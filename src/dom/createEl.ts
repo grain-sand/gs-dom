@@ -26,6 +26,22 @@ export function createEl(tag: string | IChildTagProps, props?: ITagProps | Objec
 			fnRecord[key](value, els)
 		} else if (isFunction(value)) {
 			on(key, value as any, {by: els})
+		} else if (key === 'className' || key === 'innerText' || key === 'innerHTML') {
+			// 直接设置元素的属性
+			for (const el of els) {
+				(el as any)[key] = value;
+			}
+		} else if (key === 'children') {
+			// 处理子元素
+			for (const el of els) {
+				if (Array.isArray(value)) {
+					for (const child of value) {
+						if (child instanceof HTMLElement) {
+							el.appendChild(child);
+						}
+					}
+				}
+			}
 		} else {
 			for (const el of els) {
 				el.setAttribute(key, `${value}`)

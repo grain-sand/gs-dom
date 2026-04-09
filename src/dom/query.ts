@@ -1,4 +1,4 @@
-import {DomEl} from "../com";
+import {DomEl, DomElOrArr} from "../com";
 import {isString} from "gs-base";
 import {IByQueryArg, IndexedSelectorOrArr, IValidQueryArg} from "./IQueryArg";
 import {filter} from "./filter";
@@ -22,8 +22,13 @@ import {children} from "./children";
  *   - 将作为值返回
  */
 export function query<EL extends DomEl = DomEl>(selector: IndexedSelectorOrArr | IByQueryArg): EL[];
+export function query<EL extends DomEl = DomEl>(arg: { selector: string, by?: DomElOrArr }): EL[];
 
 export function query<EL extends DomEl = DomEl>(arg: any): EL[] {
+	// 处理对象形式的参数
+	if (arg.selector) {
+		arg = {selectors: arg.selector, by: arg.by};
+	}
 	arg.selectors || (arg = {selectors: arg});
 	Array.isArray(arg.selectors) || (arg.selectors = [arg.selectors]);
 	arg.by && (Array.isArray(arg.by) || (arg.by = [arg.by])) || (arg = {...arg, by: [document]});

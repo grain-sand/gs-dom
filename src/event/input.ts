@@ -5,7 +5,7 @@ import {trigger} from "./trigger";
 
 export type InputEl = HTMLInputElement | HTMLTextAreaElement
 
-export type InputProps = IEventProps & InputEventInit & { data: string, append?: false }
+export type InputProps = IEventProps & InputEventInit & { data: string, append?: boolean }
 export type ByInputProps = InputProps & { by: InputEl | InputEl[] }
 
 export function input(arg: Listener<InputEvent>, options?: IAddEventOption): void

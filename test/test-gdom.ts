@@ -1,74 +1,187 @@
-// noinspection ES6UnusedImports
-// noinspection JSUnusedLocalSymbols
+// noinspection TypeScriptUnresolvedReference
 
-import {describe, it, expect} from "vitest";
-import {logJson} from "gs-base";
-import {query, newGDom, parents, nextAll, prevAll, find, focus, keyup, createEl, loadScript, gdom, $} from "../src";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { gdom, $, addProxyFn } from '../src';
 
-const console = (top as any).console;
-
+// 测试gdom模块的各个功能
 describe('gdom', () => {
-	document.body.innerHTML = `
-		<button>test1</button>
-		<fieldset>
-			<button class="b2">test2</button>
-		</fieldset>
-		<fieldset>
-			<button>test3</button>
-		</fieldset>
-		<fieldset>
-			<button class="b4">test4</button>
-			<div>
-				<button>b5</button>
-				<button>b6</button>
-				<button>b7</button>
-			</div>
-		</fieldset>
-	`
-	it('find', async (): Promise<void> => {
-		const input = $('<input>', {appendTo: document.body})
-			.input((e) => {
-				console.log(e)
-		})
-		$('<button', {
-			text: '新按钮',
-			appendTo: document.body,
-			click(e) {
-				input.input('abc');
-			}
-		})
+  beforeEach(() => {
+    // 清理测试环境
+    document.body.innerHTML = '';
+  });
 
-		// const b2 = query({selectors: '.b2', gdom: true}).focus(function (e) {
-		// 	console.log('b2', e.type)
-		// }).keyup((e)=>{
-		// 	console.log('b2',e.type,e)
-		// })
-		//
-		// query({selectors: '.b4', gdom: true}).click(function (e) {
-		// 	console.log('b4', e.type)
-		//
-		// 	b2.keyup({key: 'Enter'})
-		// 	keyup({key: 'Enter',by:b2})
-		// })
-		// console.log(query([{selector: 'button', content: /t2/}, '^fieldset',{selector:'~fieldset',index:-1},'>button']))
-		// const btn = document.querySelector('button.b2') as HTMLElement;
-		// // console.log(newGDom(btn).query)
-		//
-		// console.log(find('button', document.body))
-		//
-		// console.log(nextAll('button', btn))
-		// console.log(prevAll('button', btn))
+  // 测试gdom选择器功能
+  describe('selector', () => {
+    it('should select elements by selector', () => {
+      const container = document.createElement('div');
+      const el1 = document.createElement('div');
+      el1.className = 'test';
+      const el2 = document.createElement('div');
+      el2.className = 'test';
+      container.appendChild(el1);
+      container.appendChild(el2);
+      document.body.appendChild(container);
 
+      const result = gdom('.test');
+      expect(result.length).toBe(2);
+    });
 
-		// console.log(query({
-		// 	withBy: 'return',
-		// 	by: btn,
-		// 	selectors: {selector: 'button', content: 'test', visible: 'checkParents'}
-		// }))
-		// console.log(query({withBy: 'return', by: btn, selectors: {selector: 'button', content: 'abc'}}))
-		// console.log(query({withBy: 'return', by: btn, selectors: {selector: 'a', content: 'test'}}))
+    it('should select single element by id', () => {
+      const element = document.createElement('div');
+      element.id = 'test';
+      document.body.appendChild(element);
 
-		// console.log(find({selectors: 'button', by: document.body, gdom: true}))
-		// console.log(find('button'))
-	})
-})
+      const result = gdom('#test');
+      expect(result.length).toBe(1);
+    });
+
+    it('should return document when no selector provided', () => {
+      const result = gdom();
+      expect((result as any)[0]).toBe(document);
+    });
+
+    it('should handle DOMContentLoaded', () => {
+      let called = false;
+      gdom(() => {
+        called = true;
+      });
+      // 模拟DOMContentLoaded事件
+      document.dispatchEvent(new Event('DOMContentLoaded'));
+      expect(called).toBe(true);
+    });
+
+    it('should create element from tag string', () => {
+      const result = gdom('<div>');
+      expect(result.length).toBe(1);
+      expect((result[0] as HTMLElement).tagName).toBe('DIV');
+    });
+
+    it('should create element with props', () => {
+      const result = gdom('<div>', {
+        id: 'test',
+        class: 'test-class'
+      });
+      expect(result.length).toBe(1);
+      expect((result[0] as HTMLElement).id).toBe('test');
+      expect((result[0] as HTMLElement).className).toBe('test-class');
+    });
+  });
+
+  // 测试gdom代理方法
+  describe('proxy methods', () => {
+    it('should have query method', () => {
+      const container = document.createElement('div');
+      const el1 = document.createElement('div');
+      el1.className = 'test';
+      const el2 = document.createElement('div');
+      el2.className = 'test';
+      container.appendChild(el1);
+      container.appendChild(el2);
+      document.body.appendChild(container);
+
+      const result = gdom(container).query('.test');
+      expect(result.length).toBe(2);
+    });
+
+    it('should have on method', () => {
+      const element = document.createElement('div');
+      document.body.appendChild(element);
+
+      let called = false;
+      gdom(element).on('click', () => {
+        called = true;
+      });
+
+      // 触发事件
+      element.dispatchEvent(new Event('click'));
+      expect(called).toBe(true);
+    });
+
+    it('should have trigger method', () => {
+      const element = document.createElement('div');
+      document.body.appendChild(element);
+
+      let called = false;
+      gdom(element).on('customEvent', () => {
+        called = true;
+      });
+
+      // 触发事件
+      gdom(element).trigger('customEvent');
+      expect(called).toBe(true);
+    });
+
+    it('should have append method', () => {
+      const parent = document.createElement('div');
+      const child = document.createElement('div');
+      document.body.appendChild(parent);
+
+      gdom(parent).append(child);
+      expect(parent.contains(child)).toBe(true);
+    });
+
+    it('should have appendTo method', () => {
+      const parent = document.createElement('div');
+      const child = document.createElement('div');
+      document.body.appendChild(parent);
+
+      gdom(child).appendTo(parent);
+      expect(parent.contains(child)).toBe(true);
+    });
+
+    it('should have filter method', () => {
+      const container = document.createElement('div');
+      const el1 = document.createElement('div');
+      el1.className = 'test';
+      const el2 = document.createElement('div');
+      container.appendChild(el1);
+      container.appendChild(el2);
+      document.body.appendChild(container);
+
+      const result = gdom(container).filter('.test');
+      expect(result.length).toBe(1);
+    });
+
+    it('should have createEl method', () => {
+      const result = (gdom() as any).createEl('div', { id: 'test' });
+      expect(result.length).toBe(1);
+      expect((result[0] as HTMLElement).id).toBe('test');
+    });
+
+    it('should have input method', () => {
+      const inputElement = document.createElement('input');
+      document.body.appendChild(inputElement);
+
+      gdom(inputElement).input('test');
+      expect(inputElement.value).toBe('test');
+    });
+  });
+
+  // 测试$ alias
+  describe('$ alias', () => {
+    it('should work as alias for gdom', () => {
+      const element = document.createElement('div');
+      element.id = 'test';
+      document.body.appendChild(element);
+
+      const result = $('#test');
+      expect(result.length).toBe(1);
+    });
+  });
+
+  // 测试addProxyFn功能
+  describe('addProxyFn', () => {
+    it('should add custom proxy method', () => {
+      // 添加自定义代理方法
+      addProxyFn('customMethod', (by) => {
+        return () => {
+          return by.length;
+        };
+      });
+
+      const elements = [document.createElement('div'), document.createElement('div')];
+      const result = (gdom(elements) as any).customMethod();
+      expect(result).toBe(2);
+    });
+  });
+});

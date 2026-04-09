@@ -2,7 +2,7 @@ import {ByEventProps, EventType, IByEventProps} from "./EventTypes";
 import {WinOrDomOrArr} from "../com";
 import {getDefaultEventProps} from "./DefaultEventProps";
 
-export function trigger<Init extends EventInit = EventInit>(type: EventType, props?: ByEventProps<Init>): void;
+export function trigger<Init extends EventInit = EventInit>(type: EventType, props?: IByEventProps & Init): void;
 
 export function trigger(type: EventType, by: WinOrDomOrArr): void;
 

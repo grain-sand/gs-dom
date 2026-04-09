@@ -1,11 +1,16 @@
 import * as innerProxyFns from "./proxy-fns/base-props";
 import {GDomFn} from "./IGDom";
-import {appendTo, createEl, filter, query} from "../dom";
+import {append, appendTo, createEl, filter, query} from "../dom";
 // Helper functions that need to be imported
 import {input, on, trigger, un} from "../event";
 import {newGDom} from "./newGDom";
 
 export const gdomFns: Record<string | symbol, GDomFn<any>> = {...innerProxyFns as any};
+
+// 导出一个函数，每次调用都返回最新的gdomFns对象
+export function getGdomFns() {
+	return gdomFns;
+}
 
 
 export function addProxyFns(fns: Record<string | symbol, GDomFn<any>>) {
@@ -19,12 +24,15 @@ export function addProxyFn(key: string, fn: GDomFn<any>) {
 // From dom/query.ts
 addProxyFn('query', (by) => {
 	return (arg: any) => {
-		if (!Array.isArray(arg.raw)) {
-			if (isNaN(arg.length) || arg instanceof Element) {
-				arg = {selector: arg};
+		if (typeof arg === 'string') {
+			arg = {selector: arg, by, gdom: true};
+		} else if (!Array.isArray(arg.raw)) {
+			if (Number.isNaN(arg.length) || arg instanceof Element) {
+				arg = {selector: arg, by, gdom: true};
+			} else {
+				arg.by = by;
+				arg.gdom = true;
 			}
-			arg.by = by;
-			arg.gdom = true;
 		}
 		return query(arg);
 	}
@@ -69,7 +77,11 @@ addProxyFn('trigger', (by: any[], proxy: any) => {
 // From event/input.ts
 addProxyFn('input', (by: any[], proxy: any) => {
 	return (value: any, props?: any) => {
-		input(value, {...props, by});
+		if (typeof value === 'string') {
+			input({data: value, by, ...props});
+		} else {
+			input({...value, by});
+		}
 		return proxy;
 	}
 });
@@ -77,7 +89,7 @@ addProxyFn('input', (by: any[], proxy: any) => {
 // From dom/appendTo.ts
 addProxyFn('appendTo', (by: any[], proxy: any) => {
 	return (target: any) => {
-		appendTo(by, target);
+		appendTo(target, by);
 		return proxy;
 	}
 });
@@ -85,14 +97,29 @@ addProxyFn('appendTo', (by: any[], proxy: any) => {
 // From dom/filter.ts
 addProxyFn('filter', (by: any[]) => {
 	return (selector: any) => {
-		return newGDom(filter(selector, by));
+		// 先查找所有子元素，然后过滤
+		const allElements: any[] = [];
+		for (const el of by) {
+			allElements.push(...Array.from(el.querySelectorAll('*')));
+			allElements.push(el); // 包括元素本身
+		}
+		const result = filter(selector, allElements);
+		return newGDom(result);
 	}
 });
 
 // From dom/createEl.ts
 addProxyFn('createEl', () => {
 	return (tag: any, props?: any) => {
-		return newGDom(createEl(tag, props));
+		const result = createEl(tag, props);
+		return newGDom(result);
 	}
 });
 
+// From dom/append.ts
+addProxyFn('append', (by: any[], proxy: any) => {
+	return (arg: any) => {
+		append(arg, by);
+		return proxy;
+	}
+});

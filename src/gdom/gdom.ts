@@ -1,17 +1,18 @@
-import {WinOrDom} from "../com";
+import {WinOrDom, WinOrDomOrArr} from "../com";
 import {GDom} from "./IGDom";
 import {isFunction, isString} from "gs-base";
 import {newGDom} from "./newGDom";
 import {createEl, IQueryArg, ITagProps, query, TagString} from "../dom";
 import {Listener, on} from "../event";
 
+export function gdom(): any;
 export function gdom(loaded: Listener): void ;
 
 export function gdom<EL extends WinOrDom = WinOrDom>(tag: TagString, props?: ITagProps | Object): GDom<EL> ;
 
-export function gdom<EL extends WinOrDom = WinOrDom>(selector: string | string[] | WinOrDom | IQueryArg): GDom<EL> ;
+export function gdom<EL extends WinOrDom = WinOrDom>(selector: string | string[] | WinOrDomOrArr | IQueryArg): GDom<EL> ;
 
-export function gdom<EL extends WinOrDom = WinOrDom>(selector: any, props?: any): any {
+export function gdom<EL extends WinOrDom = WinOrDom>(selector?: any, props?: any): any {
 	if (isString(selector)) {
 		if (/^</.test(selector)) {
 			return newGDom(createEl(selector, props))
@@ -29,7 +30,11 @@ export function gdom<EL extends WinOrDom = WinOrDom>(selector: any, props?: any)
 	if (selector instanceof HTMLElement || selector instanceof SVGElement || selector instanceof Document || selector instanceof DocumentFragment || selector instanceof Window) {
 		return newGDom(selector as any);
 	}
-	if (Array.isArray(selector) || selector instanceof Object) {
+	if (Array.isArray(selector)) {
+		// 对于数组，直接返回GDom对象
+		return newGDom(selector as any);
+	}
+	if (selector instanceof Object) {
 		return query({selectors: selector, gdom: true});
 	}
 	return newGDom(document);

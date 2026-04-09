@@ -1,12 +1,13 @@
 import {isFunction} from "gs-base";
 import {GDom} from "./IGDom";
 import {WinOrDom} from "../com";
-import {gdomFns} from "./gdomFns";
+import {getGdomFns} from "./gdomFns";
 
 
 export function newGDom<By extends WinOrDom = WinOrDom>(by: By | By[]): GDom<By> {
 	return new Proxy(Array.isArray(by) ? by : [by], {
 		get(target, property, receiver) {
+			const gdomFns = getGdomFns();
 			if (property in gdomFns) {
 				return (gdomFns[property as keyof typeof gdomFns] as Function)(target, receiver);
 			}

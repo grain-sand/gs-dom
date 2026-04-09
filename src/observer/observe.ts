@@ -12,6 +12,8 @@ export function observe(arg: ByObserverArg) {
 
 	arg.changedAttributes && (config.attributes = true);
 	arg.changedText && (config.characterData = true);
+	// 当changedText为true时，也需要设置childList为true，因为修改textContent会触发childList mutation
+	arg.changedText && (config.childList = true);
 
 	const {
 		by = document,
@@ -39,12 +41,19 @@ export function observe(arg: ByObserverArg) {
 				changedAttributes?.(mutation);
 			} else if (mutation.type === 'characterData') {
 				changedText?.(mutation)
-			} else if (mutation.addedNodes.length) {
-				mutation.addedNodes.length && addedNodes?.(mutation.addedNodes, mutation)
-				addedGrouped && callGrouped(mutation, mutation.addedNodes, onAddedSelectors, addedTexts, addedElements, deepMatch)
-			} else if (mutation.removedNodes.length) {
-				mutation.removedNodes.length && removedNodes?.(mutation.removedNodes, mutation)
-				// removedGrouped && callGrouped(mutation, mutation.removedNodes, removedSelectors, removedRecord, removedGRecord, removedTexts, removedElements, removedGDom, deepMatch)
+			} else if (mutation.addedNodes.length || mutation.removedNodes.length) {
+				// 处理节点添加
+				if (mutation.addedNodes.length) {
+					addedNodes?.(mutation.addedNodes, mutation)
+					addedGrouped && callGrouped(mutation, mutation.addedNodes, onAddedSelectors, addedTexts, addedElements, deepMatch)
+				}
+				// 处理节点移除
+				if (mutation.removedNodes.length) {
+					removedNodes?.(mutation.removedNodes, mutation)
+					// removedGrouped && callGrouped(mutation, mutation.removedNodes, removedSelectors, removedRecord, removedGRecord, removedTexts, removedElements, removedGDom, deepMatch)
+				}
+				// 当changedText存在时，直接调用它，因为textContent的修改会触发childList mutation
+				changedText?.(mutation);
 			}
 		}
 	});

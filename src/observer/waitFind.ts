@@ -34,8 +34,9 @@ export async function waitFind<T extends HTMLElement>(selector: QuerySelector, a
 			observer.disconnect();
 			if (throwError) {
 				reject(new Error(`find ${selector} timout ${timeout} s`))
+			} else {
+				resolve(arr);
 			}
-			return arr;
 		}, timeout * 1000);
 	}))
 	return els;
