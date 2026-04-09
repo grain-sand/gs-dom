@@ -17,5 +17,7 @@
 	"lib": ["ESNext","DOM"],
 	"allowJs": true,
 	"removeComments": false,
+	"skipLibCheck": true,
+	"skipDefaultLibCheck": true
   }
 }
