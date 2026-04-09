@@ -1,4 +1,4 @@
-import {DomEl, DomElOrArr} from "../com/BrowserTypes";
+import {DomEl, DomElOrArr} from "../com";
 
 export interface IQuerySelector {
 

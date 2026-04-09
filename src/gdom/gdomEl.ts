@@ -1,4 +1,4 @@
-import {WinOrDom} from "../com/BrowserTypes";
+import {WinOrDom} from "../com";
 import {newGDom} from "./newGDom";
 import {GDom} from "./IGDom";
 

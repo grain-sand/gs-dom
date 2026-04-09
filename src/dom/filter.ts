@@ -1,9 +1,8 @@
 import {IndexedQuerySelector} from "./IQueryArg";
-import {DomEl, ElOrArr} from "../com/BrowserTypes";
+import {DomEl, ElOrArr} from "../com";
 import {isFunction} from "gs-base";
 import {parseFindArg} from "./impl/parseSelector";
-import {newGDom} from "../gdom/newGDom";
-import {addProxyFn} from "../gdom/gdomFns";
+import {addProxyFn, newGDom} from "../gdom";
 
 export function filter<El extends DomEl = DomEl>(arg: IndexedQuerySelector, by: ElOrArr): El[] {
 	let {selector, index, skipCheck, check, parsedBy} = parseFindArg(arg, by);

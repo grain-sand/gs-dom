@@ -1,7 +1,7 @@
 import {EventType, EventTypeOrArray, Listener} from "./EventTypes";
-import {WinOrDomOrArr} from "../com/BrowserTypes";
+import {WinOrDomOrArr} from "../com";
 import {isObject} from "gs-base";
-import {addProxyFn} from "../gdom/gdomFns";
+import {addProxyFn} from "../gdom";
 
 export function un(event: Record<EventType, Listener> | Object, by?: WinOrDomOrArr): void;
 export function un(event: EventTypeOrArray, listener: Listener, by?: WinOrDomOrArr): void;

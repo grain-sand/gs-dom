@@ -1,5 +1,5 @@
 
-import * as innerProxyFns from "./proxy-fns";
+import * as innerProxyFns from "./proxy-fns/base-props";
 import {GDomFn} from "./IGDom";
 
 export const gdomFns: Record<string | symbol, GDomFn<any>> = {...innerProxyFns as any};

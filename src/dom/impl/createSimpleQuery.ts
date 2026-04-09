@@ -1,4 +1,4 @@
-import {DomEl, DomElOrArr, DomOrEl} from "../../com/BrowserTypes";
+import {DomEl, DomElOrArr, DomOrEl} from "../../com";
 import {IndexedQuerySelector, SimpleQueryFn} from "../IQueryArg";
 import {ISimpleArg, parseFindArg} from "./parseSelector";
 

@@ -1,10 +1,8 @@
 {
-  "name": "gs-dom-dev",
+  "name": "gs-dom",
   "version": "0.2.4",
   "scripts": {
-    "build": "rollup -c",
-    "build-watch": "rollup -c --watch",
-    "npm:publish": "cd dist && npm publish --access public --registry https://registry.npmjs.org/ --proxy=http://172.15.0.1:8118",
+    "build": "gs-rollup -c",
     "test:event": "vitest event",
     "test:gdom": "vitest gdom",
     "test:wait": "vitest wait"
@@ -13,30 +11,13 @@
     "gs-base": "latest"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^5.1.1",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@tsconfig/node20": "^20.1.4",
-    "@types/mockjs": "^1.0.10",
-    "@types/node": "^22.10.5",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vitest/browser": "^3.0.9",
-    "@vue/test-utils": "^2.4.6",
-    "@vue/tsconfig": "^0.7.0",
-    "dotenv": "^16.4.7",
-    "esbuild": "0.25.0",
-    "gs-base": "^0.1.13",
-    "rollup": "^4.30.1",
-    "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-esbuild": "^6.1.1",
-    "rollup-plugin-typescript2": "^0.36.0",
-    "typescript": "^5.8.2",
-    "util": "^0.12.5",
-    "vite": "^6.0.7",
-    "vitest": "^3.0.9",
-    "vue": "^3.5.13",
-    "webdriverio": "^8.39.1"
+	"@vitejs/plugin-vue": "^6.0.1",
+	"@vitest/browser": "^3.2.4",
+	"@vue/test-utils": "^2.4.6",
+	"gs-rollup": "^1.0.6",
+	"typescript": "^5.9.3",
+	"vitest": "^3.2.4",
+	"vue": "^3.5.30"
   },
   "type": "module",
   "license": "MIT"

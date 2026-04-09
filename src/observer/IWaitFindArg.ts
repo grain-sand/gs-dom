@@ -1,4 +1,4 @@
-import {DomElOrArr} from "../com/BrowserTypes";
+import {DomElOrArr} from "../com";
 
 export interface IWaitFindArg {
 

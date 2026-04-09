@@ -1,7 +1,7 @@
 import {AtLeastOne} from "gs-base";
-import {DomElOrArr} from "../com/BrowserTypes";
-import {QuerySelector} from "../dom/IQueryArg";
-import {GDom} from "../gdom/IGDom";
+import {DomElOrArr} from "../com";
+import {QuerySelector} from "../dom";
+import {GDom} from "../gdom";
 
 export type ElementUpdateFn = (elements: HTMLElement[], mutation?: MutationRecord) => void | Promise<void>;
 export type GDomUpdateFn = (gdom: GDom<HTMLElement>, mutation?: MutationRecord) => void | Promise<void>;

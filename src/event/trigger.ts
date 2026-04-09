@@ -1,7 +1,7 @@
 import {ByEventProps, EventType, IByEventProps} from "./EventTypes";
-import {WinOrDomOrArr} from "../com/BrowserTypes";
+import {WinOrDomOrArr} from "../com";
 import {getDefaultEventProps} from "./DefaultEventProps";
-import {addProxyFn} from "../gdom/gdomFns";
+import {addProxyFn} from "../gdom";
 
 export function trigger<Init extends EventInit = EventInit>(type: EventType, props?: ByEventProps<Init>): void;
 

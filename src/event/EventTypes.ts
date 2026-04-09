@@ -1,4 +1,4 @@
-import {WinOrDomOrArr} from "../com/BrowserTypes";
+import {WinOrDomOrArr} from "../com";
 
 export type HtmlEventType = keyof HTMLElementEventMap | string;
 

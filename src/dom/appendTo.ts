@@ -1,7 +1,7 @@
 import {IByQueryArg, IndexedSelectorOrArr} from "./IQueryArg";
-import {ElOrArr} from "../com/BrowserTypes";
+import {ElOrArr} from "../com";
 import {query} from "./query";
-import {addProxyFn} from "../gdom/gdomFns";
+import {addProxyFn} from "../gdom";
 
 export function appendTo(arg: ElOrArr | IndexedSelectorOrArr | IByQueryArg, by: ElOrArr) {
 	if (!(arg instanceof HTMLElement) && !((arg as any)[0] instanceof HTMLElement)) {

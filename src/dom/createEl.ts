@@ -2,9 +2,9 @@ import {ChildTag, IChildTagProps, ITagProps} from "./ITagProps";
 import {isFunction} from "gs-base";
 import {appendTo} from "./appendTo";
 import {createTag} from "./impl/createTag";
-import {ElOrArr} from "../com/BrowserTypes";
-import {addProxyFn} from "../gdom/gdomFns";
-import {on} from "../event/on";
+import {ElOrArr} from "../com";
+import {addProxyFn} from "../gdom";
+import {on} from "../event";
 
 const fnRecord: Record<string, (value: any, els: HTMLElement[]) => any> = {
 	text: (v: string, els) => {

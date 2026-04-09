@@ -1,6 +1,6 @@
 import {IndexedQuerySelector} from "./IQueryArg";
-import {ElOrArr} from "../com/BrowserTypes";
-import {EventType, Listener} from "../event/EventTypes";
+import {ElOrArr} from "../com";
+import {EventType, Listener} from "../event";
 
 export type TagString = `<${string}`
 

@@ -1,5 +1,5 @@
 import {IAddEventOption, IByEventProps, Listener} from "./EventTypes";
-import {WinOrDomOrArr} from "../com/BrowserTypes";
+import {WinOrDomOrArr} from "../com";
 import {defineEvent} from "./impl/defineEvent";
 
 export type EventFnType<E extends Event = Event, Init extends EventInit = EventInit> = {

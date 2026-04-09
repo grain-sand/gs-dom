@@ -1,6 +1,6 @@
 import {isFunction} from "gs-base";
 import {GDom} from "./IGDom";
-import {WinOrDom} from "../com/BrowserTypes";
+import {WinOrDom} from "../com";
 import {gdomFns} from "./gdomFns";
 
 

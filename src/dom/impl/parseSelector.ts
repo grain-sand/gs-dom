@@ -1,6 +1,6 @@
 import {IIndexedQuerySelector, IndexedQuerySelector} from "../IQueryArg";
 import {isString} from "gs-base";
-import {DomOrEl} from "../../com/BrowserTypes";
+import {DomOrEl} from "../../com";
 import {isVisible} from "../isVisible";
 
 const typeRegex = /^[>{~^]/;

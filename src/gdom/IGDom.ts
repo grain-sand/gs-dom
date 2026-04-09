@@ -1,10 +1,7 @@
-import {DomEl, ElOrArr, WinOrDom} from "../com/BrowserTypes";
-import {IByQueryArg, IndexedQuerySelector, IndexedSelectorOrArr} from "../dom/IQueryArg";
-import {ChildTag} from "../dom/ITagProps";
-import {EventProp, EventRecord, EventType, EventTypeOrArray, Listener} from "../event/EventTypes";
-import {ObserverArg} from "../observer/IObserveArg";
-import {IWaitFindArg} from "../observer/IWaitFindArg";
-import {InputProps} from "../event/input";
+import {DomEl, ElOrArr, WinOrDom} from "../com";
+import {ChildTag, IByQueryArg, IndexedQuerySelector, IndexedSelectorOrArr} from "../dom";
+import {EventProp, EventRecord, EventType, EventTypeOrArray, InputProps, Listener} from "../event";
+import {IWaitFindArg, ObserverArg} from "../observer";
 
 export type GDomQueryFn = <El extends DomEl = DomEl>(arg: IndexedQuerySelector) => GDom<El>
 

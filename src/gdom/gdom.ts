@@ -1,13 +1,9 @@
-import {WinOrDom} from "../com/BrowserTypes";
+import {WinOrDom} from "../com";
 import {GDom} from "./IGDom";
 import {isFunction, isString} from "gs-base";
 import {newGDom} from "./newGDom";
-import {ITagProps, TagString} from "../dom/ITagProps";
-import {IQueryArg} from "../dom/IQueryArg";
-import {createEl} from "../dom/createEl";
-import {Listener} from "../event/EventTypes";
-import {query} from "../dom/query";
-import {on} from "../event/on";
+import {createEl, IQueryArg, ITagProps, query, TagString} from "../dom";
+import {Listener, on} from "../event";
 
 export function gdom(loaded: Listener): void ;
 

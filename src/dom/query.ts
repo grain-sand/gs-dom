@@ -1,4 +1,4 @@
-import {DomEl} from "../com/BrowserTypes";
+import {DomEl} from "../com";
 import {isString} from "gs-base";
 import {gdomEl} from "../gdom/gdomEl";
 import {IByQueryArg, IGdomByQueryArg, IndexedSelectorOrArr, IValidQueryArg} from "./IQueryArg";
@@ -6,8 +6,7 @@ import {filter} from "./filter";
 import {nextAll, parents, prevAll} from "./directionQueries";
 import {find} from "./find";
 import {children} from "./children";
-import {GDom} from "../gdom/IGDom";
-import {addProxyFn} from "../gdom/gdomFns";
+import {addProxyFn, GDom} from "../gdom";
 
 
 /**

@@ -1,9 +1,9 @@
 import {EventType, IAddEventOption, IByEventProps, Listener} from "../EventTypes";
-import {WinOrDomOrArr} from "../../com/BrowserTypes";
+import {WinOrDomOrArr} from "../../com";
 import {isBoolean, isFunction} from "gs-base";
 import {on} from "../on";
 import {trigger} from "../trigger";
-import {addProxyFn} from "../../gdom/gdomFns";
+import {addProxyFn} from "../../gdom";
 
 export function defineEvent(type: EventType) {
 	addProxyFn(type, (by, proxy) => {
