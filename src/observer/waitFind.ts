@@ -1,18 +1,11 @@
-import {IByWaitFindArg, IGdomByWaitFindArg} from "./IWaitFindArg";
+import {IByWaitFindArg} from "./IWaitFindArg";
 import {observe} from "./observe";
-import {gdomEl} from "../gdom/gdomEl";
-import {QuerySelector} from "../dom/IQueryArg";
-import {find} from "../dom/find";
-import {addProxyFn} from "../gdom/gdomFns";
-import {GDom} from "../gdom/IGDom";
-
-export function waitFind<T extends HTMLElement>(selector: QuerySelector, arg: IGdomByWaitFindArg): Promise<GDom<T>[] | undefined>;
+import {find, QuerySelector} from "../dom";
 
 export function waitFind<T extends HTMLElement>(selector: QuerySelector, arg?: IByWaitFindArg): Promise<T[] | undefined>;
 
-export async function waitFind<T extends HTMLElement>(selector: QuerySelector, arg?: IByWaitFindArg): Promise<GDom<T>[] | T[]> {
+export async function waitFind<T extends HTMLElement>(selector: QuerySelector, arg?: IByWaitFindArg): Promise<T[]> {
 	const {
-		gdom = false,
 		throwError = false,
 		subtree = true,
 		timeout = 300,
@@ -45,14 +38,5 @@ export async function waitFind<T extends HTMLElement>(selector: QuerySelector, a
 			return arr;
 		}, timeout * 1000);
 	}))
-	return gdomEl(els, gdom as any);
+	return els;
 }
-
-addProxyFn('waitFind', (els) => {
-	return (selector: string, arg: IByWaitFindArg) => {
-		arg || (arg = {});
-		arg.by = els as any;
-		arg.gdom = true;
-		return waitFind(selector, arg)
-	};
-})

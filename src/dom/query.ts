@@ -1,12 +1,10 @@
 import {DomEl} from "../com";
 import {isString} from "gs-base";
-import {gdomEl} from "../gdom/gdomEl";
-import {IByQueryArg, IGdomByQueryArg, IndexedSelectorOrArr, IValidQueryArg} from "./IQueryArg";
+import {IByQueryArg, IndexedSelectorOrArr, IValidQueryArg} from "./IQueryArg";
 import {filter} from "./filter";
 import {nextAll, parents, prevAll} from "./directionQueries";
 import {find} from "./find";
 import {children} from "./children";
-import {addProxyFn, GDom} from "../gdom";
 
 
 /**
@@ -22,25 +20,20 @@ import {addProxyFn, GDom} from "../gdom";
  *
  * - `selector` 为`Element`时
  *   - 将作为值返回
- *
- * - `selector` 为或 `GDom` 时
- *   - 将直接返回
  */
-export function query<EL extends DomEl = DomEl>(arg: IGdomByQueryArg): GDom<EL>;
-
 export function query<EL extends DomEl = DomEl>(selector: IndexedSelectorOrArr | IByQueryArg): EL[];
 
-export function query<EL extends DomEl = DomEl>(arg: any): GDom<EL> | EL[] {
+export function query<EL extends DomEl = DomEl>(arg: any): EL[] {
 	arg.selectors || (arg = {selectors: arg});
 	Array.isArray(arg.selectors) || (arg.selectors = [arg.selectors]);
 	arg.by && (Array.isArray(arg.by) || (arg.by = [arg.by])) || (arg = {...arg, by: [document]});
-	const {by, withBy = 'none', selectors, gdom} = arg as IValidQueryArg;
+	const {by, withBy = 'none', selectors} = arg as IValidQueryArg;
 	const result: EL[] = [];
 
 	if (withBy !== 'none') {
 		result.push(...filter(selectors[selectors.length - 1], by) as any);
 		if (result.length && withBy === 'return') {
-			return gdomEl(result, gdom as any);
+			return result;
 		}
 	}
 	let tmp = by;
@@ -65,18 +58,5 @@ export function query<EL extends DomEl = DomEl>(arg: any): GDom<EL> | EL[] {
 
 	}
 	result.push(...tmp as any);
-	return gdomEl(result, gdom as any);
+	return result;
 }
-
-addProxyFn('query', (by) => {
-	return (arg: any) => {
-		if (!Array.isArray(arg.raw)) {
-			if (isNaN(arg.length) || arg instanceof Element) {
-				arg = {selector: arg};
-			}
-			arg.by = by;
-			arg.gdom = true;
-		}
-		return query(arg);
-	}
-})

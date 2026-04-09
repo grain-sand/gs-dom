@@ -31,11 +31,4 @@ export interface IByWaitFindArg extends IWaitFindArg {
 
 	by?: DomElOrArr
 
-	gdom?: boolean
-}
-
-export interface IGdomByWaitFindArg extends IByWaitFindArg {
-
-	gdom: true
-
 }

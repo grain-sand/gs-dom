@@ -1,8 +1,6 @@
 import {IndexedQuerySelector} from "./IQueryArg";
 import {DomEl, ElOrArr} from "../com";
-import {isFunction} from "gs-base";
 import {parseFindArg} from "./impl/parseSelector";
-import {addProxyFn, newGDom} from "../gdom";
 
 export function filter<El extends DomEl = DomEl>(arg: IndexedQuerySelector, by: ElOrArr): El[] {
 	let {selector, index, skipCheck, check, parsedBy} = parseFindArg(arg, by);
@@ -13,12 +11,3 @@ export function filter<El extends DomEl = DomEl>(arg: IndexedQuerySelector, by: 
 	index < 0 && (index = result.length + index)
 	return (result[index] ? [result[index]] : []) as El[];
 }
-
-addProxyFn('filter', (by) => {
-	return (arg: any) => {
-		if (isFunction(arg)) {
-			return by.filter(arg);
-		}
-		return newGDom(filter(arg, by as any));
-	}
-})

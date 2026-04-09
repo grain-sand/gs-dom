@@ -3,7 +3,6 @@ import {isFunction} from "gs-base";
 import {appendTo} from "./appendTo";
 import {createTag} from "./impl/createTag";
 import {ElOrArr} from "../com";
-import {addProxyFn} from "../gdom";
 import {on} from "../event";
 
 const fnRecord: Record<string, (value: any, els: HTMLElement[]) => any> = {
@@ -49,10 +48,3 @@ export function append(arg: ChildTag | ChildTag[], els: ElOrArr) {
 		}
 	}
 }
-
-addProxyFn('append', (by, proxy) => {
-	return (arg: any) => {
-		append(arg, by as any)
-		return proxy;
-	}
-})

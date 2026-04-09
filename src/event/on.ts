@@ -1,6 +1,5 @@
 import {EventRecord, EventTypeOrArray, IAddEventOption, Listener} from "./EventTypes";
 import {isObject} from "gs-base";
-import {addProxyFn} from "../gdom/gdomFns";
 
 export function on(event: EventRecord | Object, options?: boolean | IAddEventOption): void;
 export function on(event: EventTypeOrArray, listener: Listener, options?: boolean | IAddEventOption): void;
@@ -29,16 +28,3 @@ export function on(event: any, listener: any, options?: any) {
 	options || (options = {});
 	(options.by || document).addEventListener(event, listener, options);
 }
-
-addProxyFn('on', (by: any[], proxy: any) => {
-	return (event: any, listener: any, options: any) => {
-		if (isObject(event)) {
-			listener && (listener.by = by) || (listener = {by});
-			on(event, listener);
-		} else {
-			options && (options.by = by) || (options = {by});
-			on(event, listener, options);
-		}
-		return proxy;
-	}
-})

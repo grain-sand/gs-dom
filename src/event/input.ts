@@ -1,8 +1,7 @@
 import {IAddEventOption, IEventProps, Listener} from "./EventTypes";
-import {isBoolean, isFunction, isString} from "gs-base";
+import {isFunction} from "gs-base";
 import {on} from "./on";
 import {trigger} from "./trigger";
-import {addProxyFn} from "../gdom/gdomFns";
 
 export type InputEl = HTMLInputElement | HTMLTextAreaElement
 
@@ -34,25 +33,3 @@ export function input(arg: any, options?: any) {
 	}
 	trigger('input', init);
 }
-
-addProxyFn('input', (by, proxy) => {
-	return (arg?: any, options?: boolean | IAddEventOption) => {
-		if (isFunction(arg)) {
-			on('input', arg as any,
-				(isBoolean(options) ? {capture: options, by} : {...options as any, by}) as any
-			);
-		} else {
-			if (arg) {
-				if (isString(arg)) {
-					arg = {data: arg, by};
-				} else {
-					arg = {...arg, by};
-				}
-			} else {
-				arg = {by};
-			}
-			input(arg);
-		}
-		return proxy;
-	}
-})

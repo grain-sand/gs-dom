@@ -3,9 +3,9 @@
   "version": "0.2.4",
   "scripts": {
     "build": "gs-rollup -c",
-    "test:event": "vitest event",
-    "test:gdom": "vitest gdom",
-    "test:wait": "vitest wait"
+    "test:event": "vitest run event",
+    "test:gdom": "vitest run gdom",
+    "test:wait": "vitest run wait"
   },
   "dependencies": {
     "gs-base": "latest"

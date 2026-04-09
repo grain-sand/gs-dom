@@ -1,7 +1,6 @@
 import {EventType, EventTypeOrArray, Listener} from "./EventTypes";
 import {WinOrDomOrArr} from "../com";
 import {isObject} from "gs-base";
-import {addProxyFn} from "../gdom";
 
 export function un(event: Record<EventType, Listener> | Object, by?: WinOrDomOrArr): void;
 export function un(event: EventTypeOrArray, listener: Listener, by?: WinOrDomOrArr): void;
@@ -29,10 +28,3 @@ export function un(event: any, listener: any, by?: WinOrDomOrArr): void {
 	}
 	(by || document).removeEventListener(event, listener);
 }
-
-addProxyFn('un', (by: any[], proxy: any) => {
-	return (event: any, listener: any) => {
-		un(event, listener, by);
-		return proxy;
-	}
-})

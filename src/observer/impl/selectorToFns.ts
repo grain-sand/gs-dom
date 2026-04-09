@@ -1,6 +1,5 @@
 import {SelectorElementUpdate} from "../IObserveArg";
 import {parseSelector} from "../../dom/impl/parseSelector";
-import {newGDom} from "../../gdom/newGDom";
 
 export type SelectorFn = (els: HTMLElement[], mutation?: MutationRecord, liveDeep?: boolean) => void;
 
@@ -24,9 +23,9 @@ export function mapSelectorToFn(selectors: SelectorElementUpdate[]): ISelectorFn
 }
 
 function selectorToFns(selectorUpdate: SelectorElementUpdate) {
-	const {addedElements, removedElements, addedGDom, removedGDom} = selectorUpdate
-	const useAdd = !!(addedElements || addedGDom)
-	const useRemove = !!(removedElements || removedGDom)
+	const {addedElements, removedElements} = selectorUpdate
+	const useAdd = !!addedElements
+	const useRemove = !!removedElements
 	const {selector, skipCheck, check} = parseSelector(selectorUpdate.selector)
 
 	function filter(els: HTMLElement[], deepMatch?: boolean) {
@@ -49,7 +48,6 @@ function selectorToFns(selectorUpdate: SelectorElementUpdate) {
 			els = filter(els, deepMatch);
 			if (els) {
 				addedElements?.(els, mutation)
-				addedGDom?.(newGDom(els), mutation)
 			}
 		},
 		onRemoveEl: (els: HTMLElement[], mutation?: MutationRecord, deepMatch?: boolean): void => {
@@ -59,7 +57,6 @@ function selectorToFns(selectorUpdate: SelectorElementUpdate) {
 			els = filter(els, deepMatch);
 			if (els) {
 				removedElements?.(els, mutation)
-				removedGDom?.(newGDom(els), mutation)
 			}
 		}
 	}

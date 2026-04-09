@@ -1,7 +1,6 @@
 import {ByEventProps, EventType, IByEventProps} from "./EventTypes";
 import {WinOrDomOrArr} from "../com";
 import {getDefaultEventProps} from "./DefaultEventProps";
-import {addProxyFn} from "../gdom";
 
 export function trigger<Init extends EventInit = EventInit>(type: EventType, props?: ByEventProps<Init>): void;
 
@@ -45,11 +44,3 @@ export function trigger<Init extends EventInit = EventInit>(type: EventType, pro
 		(by as any).dispatchEvent(event);
 	}
 }
-
-addProxyFn('trigger', (by: any[], proxy: any) => {
-	return (type: EventType, props: IByEventProps) => {
-		props && (props.by = by) || (props = {by});
-		trigger(type, props as any);
-		return proxy;
-	}
-})

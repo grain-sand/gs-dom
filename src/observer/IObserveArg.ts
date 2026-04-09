@@ -1,10 +1,8 @@
 import {AtLeastOne} from "gs-base";
 import {DomElOrArr} from "../com";
 import {QuerySelector} from "../dom";
-import {GDom} from "../gdom";
 
 export type ElementUpdateFn = (elements: HTMLElement[], mutation?: MutationRecord) => void | Promise<void>;
-export type GDomUpdateFn = (gdom: GDom<HTMLElement>, mutation?: MutationRecord) => void | Promise<void>;
 export type TextNodeUpdateFn = (texts: Text[], mutation?: MutationRecord) => void | Promise<void>;
 
 interface IElementUpdate {
@@ -19,16 +17,6 @@ interface IElementUpdate {
 	 */
 	removedElements?: ElementUpdateFn;
 
-	/**
-	 * 当添加了元素时调用,参数将包装为`GDom`对象
-	 */
-	addedGDom?: GDomUpdateFn;
-
-	/**
-	 * 当删除了元素时调用,参数将包装为`GDom`对象
-	 */
-	removedGDom?: GDomUpdateFn;
-
 }
 
 interface ISelectorElementUpdate extends IElementUpdate {
@@ -39,7 +27,7 @@ interface ISelectorElementUpdate extends IElementUpdate {
 	selector: QuerySelector
 }
 
-export type SelectorElementUpdate = AtLeastOne<ISelectorElementUpdate, 'addedElements' | 'removedElements' | 'addedGDom' | 'removedGDom'>;
+export type SelectorElementUpdate = AtLeastOne<ISelectorElementUpdate, 'addedElements' | 'removedElements'>;
 
 type PartialIElementUpdate = Partial<IElementUpdate>;
 

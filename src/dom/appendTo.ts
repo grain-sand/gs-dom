@@ -1,7 +1,6 @@
 import {IByQueryArg, IndexedSelectorOrArr} from "./IQueryArg";
 import {ElOrArr} from "../com";
 import {query} from "./query";
-import {addProxyFn} from "../gdom";
 
 export function appendTo(arg: ElOrArr | IndexedSelectorOrArr | IByQueryArg, by: ElOrArr) {
 	if (!(arg instanceof HTMLElement) && !((arg as any)[0] instanceof HTMLElement)) {
@@ -16,10 +15,3 @@ export function appendTo(arg: ElOrArr | IndexedSelectorOrArr | IByQueryArg, by: 
 		parent.appendChild(by);
 	}
 }
-
-addProxyFn('appendTo', (by, proxy) => {
-	return (arg: any) => {
-		appendTo(arg, by as any);
-		return proxy;
-	}
-})

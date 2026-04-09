@@ -1,8 +1,6 @@
-import {ByObserverArg, ElementUpdateFn, GDomUpdateFn, TextNodeUpdateFn} from "./IObserveArg";
+import {ByObserverArg, ElementUpdateFn, TextNodeUpdateFn} from "./IObserveArg";
 import {mapSelectorToFn, SelectorFn} from "./impl/selectorToFns";
-import {groupNodes} from "../dom/groupNodes";
-import {addProxyFn} from "../gdom/gdomFns";
-import {newGDom} from "../gdom/newGDom";
+import {groupNodes} from "../dom";
 
 export function observe(arg: ByObserverArg) {
 	const config: MutationObserverInit = {
@@ -23,8 +21,6 @@ export function observe(arg: ByObserverArg) {
 		removedTexts,
 		addedElements,
 		removedElements,
-		addedGDom,
-		removedGDom,
 		changedAttributes,
 		changedText,
 		selectors = [],
@@ -33,8 +29,8 @@ export function observe(arg: ByObserverArg) {
 
 	const {onAddedSelectors, onRemovedSelectors} = mapSelectorToFn(selectors!)
 
-	const addedGrouped = !!(addedElements || addedGDom || addedTexts || onAddedSelectors.length);
-	const removedGrouped = !!(removedElements || removedGDom || removedTexts || onRemovedSelectors.length);
+	const addedGrouped = !!(addedElements || addedTexts || onAddedSelectors.length);
+	const removedGrouped = !!(removedElements || removedTexts || onRemovedSelectors.length);
 	(addedNodes || removedNodes || addedGrouped || removedGrouped) && (config.childList = true);
 
 	const observer = new MutationObserver(mutations => {
@@ -45,7 +41,7 @@ export function observe(arg: ByObserverArg) {
 				changedText?.(mutation)
 			} else if (mutation.addedNodes.length) {
 				mutation.addedNodes.length && addedNodes?.(mutation.addedNodes, mutation)
-				addedGrouped && callGrouped(mutation, mutation.addedNodes, onAddedSelectors, addedTexts, addedElements, addedGDom, deepMatch)
+				addedGrouped && callGrouped(mutation, mutation.addedNodes, onAddedSelectors, addedTexts, addedElements, deepMatch)
 			} else if (mutation.removedNodes.length) {
 				mutation.removedNodes.length && removedNodes?.(mutation.removedNodes, mutation)
 				// removedGrouped && callGrouped(mutation, mutation.removedNodes, removedSelectors, removedRecord, removedGRecord, removedTexts, removedElements, removedGDom, deepMatch)
@@ -62,22 +58,13 @@ export function observe(arg: ByObserverArg) {
 	return observer;
 }
 
-addProxyFn('observe', (els) => {
-	return (arg: ByObserverArg) => {
-		arg.by = els as any;
-		return observe(arg);
-	};
-})
-
-
-export function callGrouped(mutation: MutationRecord, nodes: NodeList, onUpdatedSelectors: SelectorFn[], textsUpdated?: TextNodeUpdateFn, elementsUpdated?: ElementUpdateFn, gdomUpdated?: GDomUpdateFn, deepMatch?: boolean) {
+export function callGrouped(mutation: MutationRecord, nodes: NodeList, onUpdatedSelectors: SelectorFn[], textsUpdated?: TextNodeUpdateFn, elementsUpdated?: ElementUpdateFn, deepMatch?: boolean) {
 	const {textNodes, elementNodes} = groupNodes(mutation.addedNodes)
 	textNodes.length && textsUpdated?.(textNodes, mutation);
 	if (elementNodes.length < 1) {
 		return
 	}
 	elementsUpdated?.(elementNodes, mutation);
-	gdomUpdated?.(newGDom(elementNodes), mutation);
 	onUpdatedSelectors.length && callSelector(onUpdatedSelectors, elementNodes, mutation, deepMatch);
 }
 
