@@ -1,6 +1,7 @@
 // noinspection TypeScriptUnresolvedReference
 
-import {IReactXCellDivProps, DisplayType} from './IReactXCellDivProps';
+import {IReactXCellDivProps} from './types/IReactXCellDivProps';
+import { DisplayType } from './types/DisplayType';
 import {getReactProps} from '../react/getReactProps';
 
 export function getTweetId(el: Element): string | undefined {
@@ -125,27 +126,27 @@ function getTweetIdFromSibling(sibling: any): string | undefined {
 		// 从 key 中提取 tweet-id
 		return sibling.key.substring('tweet-'.length);
 	}
-	
+
 	// 检查 sibling 的 props.item.id
 	if (sibling.props?.item?.id && sibling.props.item.id.startsWith('tweet-')) {
 		return sibling.props.item.id.substring('tweet-'.length);
 	}
-	
+
 	// 检查 sibling 的 props.item.data.content.id
 	if (sibling.props?.item?.data?.content?.id) {
 		return sibling.props.item.data.content.id;
 	}
-	
+
 	// 检查 sibling 的 props.item.data.entryId
 	if (sibling.props?.item?.data?.entryId && sibling.props.item.data.entryId.startsWith('tweet-')) {
 		return sibling.props.item.data.entryId.substring('tweet-'.length);
 	}
-	
+
 	// 递归检查下一个 sibling
 	if (sibling.sibling) {
 		return getTweetIdFromSibling(sibling.sibling);
 	}
-	
+
 	// 所有尝试都失败，返回 undefined
 	return undefined;
 }
