@@ -69,11 +69,15 @@ export function safeStringify(
 		}
 
 		if (typeof value !== 'object') {
-			return `[${typeof value}]`
+			try{
+				return value
+			} catch  {
+				return `[${typeof value}]`
+			}
 		}
 
 		// 循环引用
-		if (seen.has(value as object)) {
+		if (isNaN(maxDepth) && seen.has(value as object)) {
 			return '[Circular]'
 		}
 
