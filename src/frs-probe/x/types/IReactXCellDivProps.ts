@@ -10,7 +10,6 @@ export interface IReactXCellDivProps extends IReactProps<IEntry, IItem, IReactXC
 	setAPI?: Function;
 }
 
-export * from './IReactXCellDivProps'
 export * from './IItem'
 export * from './IItemData'
 export * from './IModule'

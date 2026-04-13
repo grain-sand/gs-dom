@@ -1,7 +1,7 @@
 import {isFunction} from "gs-base";
 import {GDom} from "./IGDom";
 import {WinOrDom} from "../com";
-import {getGdomFns} from "./gdomFns";
+import {getGdomFns} from "./gdomFnsRegistry";
 
 
 export function newGDom<By extends WinOrDom = WinOrDom>(by: By | By[]): GDom<By> {

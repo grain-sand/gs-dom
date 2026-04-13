@@ -14,6 +14,17 @@ export function getTweetUserId(el: Element): string | undefined {
  * @returns 用户 ID，如果不存在则返回 undefined
  */
 export function getTweetUserIdByProps(props: IReactXCellDivProps): string | undefined {
+	// 尝试从 fromUsers 字段获取用户 ID
+	if (props.entry?.content?.fromUsers?.['0']) {
+		return props.entry.content.fromUsers['0'];
+	} else if (props.children?.entry?.content?.fromUsers?.['0']) {
+		return props.children.entry.content.fromUsers['0'];
+	} else if (props.children?.props?.entry?.content?.fromUsers?.['0']) {
+		return props.children.props.entry.content.fromUsers['0'];
+	} else if (props.children?.props?.children?.props?.entry?.content?.fromUsers?.['0']) {
+		return props.children.props.children.props.entry.content.fromUsers['0'];
+	}
+
 	// 检查 displayType
 	let displayType: DisplayType | undefined;
 

@@ -14,6 +14,40 @@ export function getTweetId(el: Element): string | undefined {
  * @returns 内容 ID，如果不存在则返回 undefined
  */
 export function getTweetIdByProps(props: IReactXCellDivProps): string | undefined {
+	// 尝试从 targetTweets 字段获取 tweet ID
+	if (props.entry?.content?.targetTweets?.['0']) {
+		return props.entry.content.targetTweets['0'];
+	} else if (props.children?.entry?.content?.targetTweets?.['0']) {
+		return props.children.entry.content.targetTweets['0'];
+	} else if (props.children?.props?.entry?.content?.targetTweets?.['0']) {
+		return props.children.props.entry.content.targetTweets['0'];
+	} else if (props.children?.props?.children?.props?.entry?.content?.targetTweets?.['0']) {
+		return props.children.props.children.props.entry.content.targetTweets['0'];
+	}
+
+	// 尝试从 url 字段提取 tweet ID
+	if (props.entry?.content?.url?.url) {
+		const tweetIdFromUrl = extractTweetIdFromUrl(props.entry.content.url.url);
+		if (tweetIdFromUrl) {
+			return tweetIdFromUrl;
+		}
+	} else if (props.children?.entry?.content?.url?.url) {
+		const tweetIdFromUrl = extractTweetIdFromUrl(props.children.entry.content.url.url);
+		if (tweetIdFromUrl) {
+			return tweetIdFromUrl;
+		}
+	} else if (props.children?.props?.entry?.content?.url?.url) {
+		const tweetIdFromUrl = extractTweetIdFromUrl(props.children.props.entry.content.url.url);
+		if (tweetIdFromUrl) {
+			return tweetIdFromUrl;
+		}
+	} else if (props.children?.props?.children?.props?.entry?.content?.url?.url) {
+		const tweetIdFromUrl = extractTweetIdFromUrl(props.children.props.children.props.entry.content.url.url);
+		if (tweetIdFromUrl) {
+			return tweetIdFromUrl;
+		}
+	}
+
 	// 检查 displayType 是否为 Tweet、FocalTweet 或 MediaGrid
 	let displayType: DisplayType | undefined;
 
@@ -112,6 +146,20 @@ export function getTweetIdByProps(props: IReactXCellDivProps): string | undefine
 	}
 
 	// 所有尝试都失败，返回 undefined
+	return undefined;
+}
+
+/**
+ * 从 URL 中提取 tweet ID
+ * @param url 包含 tweet ID 的 URL
+ * @returns tweet ID，如果不存在则返回 undefined
+ */
+function extractTweetIdFromUrl(url: string): string | undefined {
+	// 匹配 https://twitter.com/username/status/1234567890 格式的 URL
+	const match = url.match(/\/status\/(\d+)/);
+	if (match && match[1]) {
+		return match[1];
+	}
 	return undefined;
 }
 

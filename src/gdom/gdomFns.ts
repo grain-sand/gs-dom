@@ -1,25 +1,14 @@
 import * as innerProxyFns from "./proxy-fns/base-props";
-import {GDomFn} from "./IGDom";
 import {append, appendTo, createEl, filter, query} from "../dom";
 // Helper functions that need to be imported
 import {input, on, trigger, un} from "../event";
 import {newGDom} from "./newGDom";
+import {addProxyFn, addProxyFns, gdomFns, getGdomFns} from "./gdomFnsRegistry";
 
-export const gdomFns: Record<string | symbol, GDomFn<any>> = {...innerProxyFns as any};
+// 初始化 gdomFns 对象
+Object.assign(gdomFns, innerProxyFns as any);
 
-// 导出一个函数，每次调用都返回最新的gdomFns对象
-export function getGdomFns() {
-	return gdomFns;
-}
-
-
-export function addProxyFns(fns: Record<string | symbol, GDomFn<any>>) {
-	Object.assign(gdomFns, fns);
-}
-
-export function addProxyFn(key: string, fn: GDomFn<any>) {
-	gdomFns[key] = fn;
-}
+export {gdomFns, getGdomFns, addProxyFns, addProxyFn};
 
 // From dom/query.ts
 addProxyFn('query', (by) => {
