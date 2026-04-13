@@ -4,7 +4,9 @@ import {IReactProps} from "../react/IReactProps";
 export const DisplayTypes = [
   'Tweet',
   'defaultDisplayType',
-  'FocalTweet'
+  'FocalTweet',
+  'MediaGrid',
+  'User'
 ] as const;
 
 // 从数组定义联合类型
@@ -145,4 +147,16 @@ export interface IReactXCellDivProps extends IReactProps<IEntry, IItem, IReactXC
 	displayType?: DisplayType;
 	module?: IModule;
 	setAPI?: Function;
+	isAnimationDisabled?: boolean;
+	onAnimationEnded?: Function;
+	onAnimationStarted?: Function;
+	onHeightChanged?: Function;
+	onVisible?: Function;
+	positioningStyle?: {
+		top?: any;
+		transform?: string;
+	};
+	shouldAnimate?: boolean;
+	translationTransitionStyle?: string;
+	visible?: boolean;
 }

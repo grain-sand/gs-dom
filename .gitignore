@@ -15,6 +15,8 @@ coverage
 *.local
 *.lock
 tmp
+tmp-test
+
 
 /cypress/videos/
 /cypress/screenshots/
