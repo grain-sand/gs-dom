@@ -1,11 +1,22 @@
 // noinspection TypeScriptUnresolvedReference
 
 import {IReactXCellDivProps} from './types/IReactXCellDivProps';
-import { DisplayType } from './types/DisplayType';
+import {DisplayType} from './types/DisplayType';
 import {getReactProps} from '../react/getReactProps';
 
+const DomIdReg = /status\/(\d+)/
+
 export function getTweetId(el: Element): string | undefined {
-	return getTweetIdByProps(getReactProps(el)!)
+	let id = getTweetIdByProps(getReactProps(el)!)
+	if (id) {
+		return id;
+	}
+	return getTweetIdByDom(el);
+}
+
+export function getTweetIdByDom(el: Element) {
+	const href: string = (el?.querySelector('a[href*="/status/"]') as any)?.href
+	return DomIdReg.exec(href || '')?.[1]
 }
 
 /**
