@@ -59,6 +59,15 @@ export function getTweetIdByProps(props: IReactXCellDivProps): string | undefine
 		}
 	}
 
+	// 尝试从 tweet.id_str 字段获取 tweet ID
+	if (props.children?.['2']?.props?.tweet?.id_str) {
+		return props.children?.['2'].props.tweet.id_str;
+	} else if (props.children?.props?.tweet?.id_str) {
+		return props.children.props.tweet.id_str;
+	} else if (props.children?.props?.children?.props?.tweet?.id_str) {
+		return props.children.props.children.props.tweet.id_str;
+	}
+
 	// 检查 displayType 是否为 Tweet、FocalTweet 或 MediaGrid
 	let displayType: DisplayType | undefined;
 

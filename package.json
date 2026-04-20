@@ -1,6 +1,6 @@
 {
   "name": "gs-dom",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "scripts": {
     "build": "gs-rollup -c",
     "test:event": "vitest run event",

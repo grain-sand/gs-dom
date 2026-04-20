@@ -1,5 +1,143 @@
 import { DisplayType } from './DisplayType';
 
+export interface IUser {
+	default_profile?: boolean;
+	default_profile_image?: boolean;
+	description?: string;
+	entities?: any;
+	fast_followers_count?: number;
+	favourites_count?: number;
+	follow_request_sent?: boolean;
+	followers_count?: number;
+	friends_count?: number;
+	has_custom_timelines?: boolean;
+	is_translator?: boolean;
+	listed_count?: number;
+	media_count?: number;
+	needs_phone_verification?: boolean;
+	normal_followers_count?: number;
+	notifications?: boolean;
+	possibly_sensitive?: boolean;
+	profile_banner_url?: string;
+	profile_interstitial_type?: string;
+	statuses_count?: number;
+	time_zone?: string;
+	translator_type?: string;
+	url?: string;
+	utc_offset?: number;
+	want_retweets?: boolean;
+	withheld_description?: string;
+	withheld_scope?: string;
+	name?: string;
+	screen_name?: string;
+	dm_muting?: any;
+	id_str?: string;
+	is_profile_translatable?: any;
+	professional?: any;
+	verified_phone_status?: any;
+	business_account?: any;
+	profile_image_shape?: string;
+	subscribers_count?: any;
+	creator_subscriptions_count?: any;
+	location?: string;
+	profile_description_language?: string;
+	profile_sort_enabled?: any;
+	is_blue_verified?: boolean;
+	super_follow_eligible?: boolean;
+	super_followed_by?: boolean;
+	super_following?: boolean;
+	verified?: boolean;
+	protected?: boolean;
+	profile_image_url_https?: string;
+	can_dm?: boolean;
+	can_media_tag?: boolean;
+	blocked_by?: boolean;
+	blocking?: boolean;
+	followed_by?: boolean;
+	following?: boolean;
+	muting?: boolean;
+	has_graduated_access?: boolean;
+	created_at?: string;
+	parody_commentary_fan_label?: string;
+}
+
+export interface ITweet {
+	bookmark_count?: number;
+	bookmarked?: boolean;
+	conversation_id_str?: string;
+	display_text_range?: {
+		0: number;
+		1: number;
+		length: number;
+	};
+	entities?: {
+		hashtags?: any;
+		media?: any;
+		smarttags?: any;
+		symbols?: any;
+		timestamps?: any;
+		urls?: any;
+		user_mentions?: any;
+	};
+	favorite_count?: number;
+	favorited?: boolean;
+	full_text?: string;
+	id_str?: string;
+	is_quote_status?: boolean;
+	lang?: string;
+	possibly_sensitive?: boolean;
+	possibly_sensitive_editable?: boolean;
+	quote_count?: number;
+	quoted_status_permalink?: {
+		display?: string;
+		expanded?: string;
+		url?: string;
+	};
+	reply_count?: number;
+	retweet_count?: number;
+	retweeted?: boolean;
+	authorAppealLabel?: any;
+	content_disclosure?: any;
+	conversation_control_details?: any;
+	edit_control?: {
+		edit_tweet_ids?: any;
+		editable_until_msecs?: string;
+		edits_remaining?: string;
+		is_edit_eligible?: boolean;
+	};
+	edit_perspective?: any;
+	is_translatable?: boolean;
+	has_birdwatch_notes?: boolean;
+	has_super_follower?: boolean;
+	note_tweet?: any;
+	post_image_description?: any;
+	post_video_description?: any;
+	previous_counts?: any;
+	quick_promote_eligibility?: any;
+	source?: string;
+	voiceInfo?: any;
+	mediaVisibilityResults?: any;
+	grok_analysis_button?: boolean;
+	user?: IUser;
+	retweeted_status?: any;
+	quoted_status?: any;
+	views?: {
+		count?: number;
+		state?: string;
+	};
+	extended_entities?: {
+		media?: any;
+	};
+	text?: string;
+	created_at?: string;
+	source_name?: string;
+	source_url?: string;
+	in_reply_to_user_id_str?: any;
+	in_reply_to_screen_name?: any;
+	birdwatch_pivot?: any;
+	permalink?: string;
+}
+
 export interface IContent {
 	id?: string;
 	prerollMetadata?: any;
@@ -18,4 +156,5 @@ export interface IContent {
 	grok_translated_post?: any;
 	count?: number;
 	lastRevealedTimestamp?: number | null;
+	tweet?: ITweet;
 }
